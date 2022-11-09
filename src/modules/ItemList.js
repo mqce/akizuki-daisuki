@@ -49,10 +49,13 @@ export class ItemList {
       <div class="apl-header-length">${length}</div>
     </header>
     <div class="apl-body">
-      <div class="apl-list"></div>
-      <footer>
-        <button class="apl-cart-button">全てかごに入れる</button>
-      </footer>
+      <form method="POST" action="/catalog/cart/cart.aspx">
+        <input type="hidden" name="input_type" value="True">
+        <div class="apl-list"></div>
+        <footer>
+          <button class="apl-cart-button">全てかごに入れる</button>
+        </footer>
+      </form>
     </div>
     `;
     const $ul = this.ul();
@@ -94,6 +97,8 @@ export class ItemList {
     <img class="apl-item-thumb" src="${item.image}">
     <a href="${item.url}" class="apl-item-name" title="${name}">${name}</a>
     <span class="apl-item-price">&yen;${price}</span>
+    <input type="hidden" name="goods" value="${item.id}">
+    <input type="hidden" name="${item.id}_qty" value="1">
     `;
     $li.setHTML(html, sanitizer);
   
