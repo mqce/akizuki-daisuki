@@ -1,0 +1,76 @@
+/* layout */
+
+#header{
+  opacity:0.1;
+}
+
+body{
+}
+.akizuki-permanent-list{
+  /* reset */
+  *,*::before,*::after{box-sizing:border-box; margin:0; padding:0;}
+
+  position:absolute;
+  right:0;
+  top:0;
+  width:400px;
+
+  ul{
+    list-style:none;
+    padding:0;
+    box-sizing:border-box;
+    margin:12px 16px;
+  }
+
+  li{
+    display:flex;
+  }
+  .thumb{
+    width:32px;
+  }
+  .name{
+    width:260px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .price{
+
+  }
+
+}
+
+
+/* add button */
+.cart_table h6{
+  display:flex;
+  justify-content: space-between;
+}
+
+
+
+.popup{
+  width:400px;
+
+  .akizuki-permanent-list{
+    width:100%;
+    position: relative;
+  }
+  .header{
+    display:none;
+    background:#FDE1F4;
+
+    h1{
+      display: inline-block;
+      background: linear-gradient(90deg, #e61912, #e99415);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke:1px #7d4e22;
+      font-size:20px;
+      font-weight: bold;
+    }
+  }
+
+}
+
