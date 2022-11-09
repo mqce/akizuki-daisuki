@@ -9,30 +9,30 @@ console.log('content.js');
 const itemList = new ItemList();
 
 function main(){
-  // 商品リストをappend
-  addItemList();
+  // 欲しいものリストを表示
+  showItemList();
 
   // 商品ページならAddButtonを追加
   const $content = document.querySelector('#maincontents');
   if($content){
     // 商品データをscrape
-    const item = getItem($content);
+    const item = getItemData($content);
     console.log(item);
 
-    // Addボタンを追加
-    addButton($content, itemList, item);
+    // 追加ボタンを描画
+    showAddButton($content, item);
   }
 }
 
-function getItem($content){
+function getItemData($content){
   const scraper = new ItemScraper($content);
   return scraper.item;
 }
 
-function addButton($content, itemList, item){
+function showAddButton($content, item){
   const $title = $content.querySelector('.cart_table h6');
-  const $button = document.createElement('button');
-  $button.textContent = '+';
+  const $button = document.createElement('div');
+  $button.classList.add('apl-save-button');
   $title.appendChild($button);
 
   $button.addEventListener('click', e=>{
@@ -41,14 +41,16 @@ function addButton($content, itemList, item){
   
 }
 
-async function addItemList(){
+async function showItemList(){
   const $div = document.createElement('div');
   $div.classList.add('akizuki-permanent-list');
 
-  const $ul = await itemList.init();
-  $div.appendChild($ul);
+  const $elem = await itemList.load();
+  $div.appendChild($elem);
   document.body.appendChild($div);
 }
 
+
 main();
+
 

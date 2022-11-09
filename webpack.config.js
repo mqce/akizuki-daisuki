@@ -23,8 +23,6 @@ var fileExtensions = [
 var options = {
   mode: process.env.NODE_ENV || "development",
   entry: {
-    popup: path.join(__dirname, "src", "popup.js"),
-    background: path.join(__dirname, "src", "background.js"),
     content: path.join(__dirname, "src", "content.js"),
   },
   output: {
@@ -94,23 +92,14 @@ var options = {
           },
         },
         {
-          from: "src/background-wrapper.js",
-          to: path.join(__dirname, "dist"),
-        },
-        {
-          from: "src/pages",
-          to: path.join(__dirname, "dist", "pages"),
+          from: "src/img",
+          to: path.join(__dirname, "dist", "img"),
         },
         {
           from: "src/icons",
           to: path.join(__dirname, "dist", "icons"),
         },
       ],
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "popup.html"),
-      filename: "popup.html",
-      chunks: ["popup"],
     }),
     new WriteFilePlugin(),
   ],
