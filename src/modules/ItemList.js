@@ -1,9 +1,12 @@
 "use strict";
 
+import interact from 'interactjs'
+import { Storage } from './Storage.js'
 import { ItemListData } from './ItemListData.js'
 
 // https://developer.mozilla.org/ja/docs/Web/API/Element/setHTML
 const sanitizer = new Sanitizer();
+const storage = new Storage();
 
 // 全角to半角
 function replaceFullToHalf(str){
@@ -21,10 +24,23 @@ function replaceFullToHalf(str){
 export class ItemList {
   constructor() {
     this.itemListData = new ItemListData();
+
+    // ページ離脱前にサイズを保存
+    window.addEventListener('beforeunload', async (e)=>{
+      await storage.set('bodyWidth', this.bodyWidth);
+      await storage.set('bodyHeight', this.bodyHeight);
+      e.returnValue = '';
+    });
   }
   // chrome.storageに保存されているデータをロードしてリストDOMを生成
   async load(){
     this.list = await this.itemListData.load();
+
+    // サイズをロード
+    this.bodyWidth = await storage.get('bodyWidth') || 400;
+    this.bodyHeight = await storage.get('bodyHeight') || 'auto';
+
+    // .akizuki-permanent-list直下に置くdivを作る
     this.$elem = document.createElement('div');
     return this.update();
   }
@@ -58,11 +74,20 @@ export class ItemList {
       </form>
     </div>
     `;
-    const $ul = this.ul();
+
     this.$elem.setHTML(html, sanitizer);
-    this.$elem.querySelector('.apl-list').appendChild($ul);
+    const $body = this.$elem.querySelector('.apl-body');
+    const $list = this.$elem.querySelector('.apl-list');
+    const $ul = this.ul();
+    $list.appendChild($ul);
+
+    // bodyのサイズを復元
+    $body.style.width = this.bodyWidth + 'px';
+    $body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
+    this.interactable($body);
+
     if(isActive){
-      this.$elem.querySelector('.apl-body').classList.add('apl-active');
+      $body.classList.add('apl-active');
     }
     this.addEvents();
 
@@ -116,5 +141,32 @@ export class ItemList {
     */
   
     return $li;
+  }
+  interactable($elem){
+    const self = this;
+    interact($elem)
+    .resizable({
+      edges: { top: false, left: false, bottom: true, right: true },
+      listeners: {
+        move (event) {
+          let { x, y } = event.target.dataset
+
+          self.bodyWidth = event.rect.width;
+          self.bodyHeight = event.rect.height;
+
+          x = (parseFloat(x) || 0) + event.deltaRect.left
+          y = (parseFloat(y) || 0) + event.deltaRect.top
+
+          Object.assign(event.target.style, {
+            width: `${event.rect.width}px`,
+            height: `${event.rect.height}px`,
+            transform: `translate(${x}px, ${y}px)`
+          })
+
+          Object.assign(event.target.dataset, { x, y })
+        }
+      }
+    })
+    return $elem;
   }
 }

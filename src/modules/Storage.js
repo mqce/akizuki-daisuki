@@ -35,7 +35,7 @@ export class Storage {
   async set(key, value){
     let obj = {};
     obj[key] = value;
-    await this.storage.set(obj);
+    return await this.storage.set(obj);
   }
   async getArray(key){
     let arr = [];
@@ -58,13 +58,12 @@ export class Storage {
       const regex = new RegExp("^" + key + "[0-9]+$");
       return regex.test(storageKey);
     })
-    console.log({removeKeys});
-    this.storage.remove(removeKeys);
+    await this.storage.remove(removeKeys);
 
     // 配列の各要素に「引数key＋連番」で登録する
     // key="item"の場合：{item1:x, item2:y, ... }
     const obj = this.arrayToSequentialObject(arr, key);
-    await this.storage.set(obj);
+    return await this.storage.set(obj);
   }
   arrayToSequentialObject(arr, key){
     let obj = {};

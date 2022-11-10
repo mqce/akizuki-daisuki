@@ -1,8 +1,8 @@
 {
-  "name": "chrome-manifest-v3-webpack-hotreload-template",
+  "name": "akizuki-permanent-list",
   "version": "1.0.0",
-  "description": "Template for Chrome Extension (Manifest v3) with webpack hot reloading",
-  "main": "src/popup.js",
+  "description": "Chrome Extension",
+  "main": "src/content.js",
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
@@ -30,23 +30,7 @@
     "build": "node scripts/build.js",
     "start": "node scripts/webpack.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hirenchalodiya1/chrome-manifest-v3-webpack-hotreload-template.git"
-  },
-  "keywords": [
-    "Chrome",
-    "Extension",
-    "Manifest",
-    "v3",
-    "Webpack",
-    "hot",
-    "reloading"
-  ],
-  "author": "Hiren Chalodiya",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hirenchalodiya1/chrome-manifest-v3-webpack-hotreload-template/issues"
-  },
-  "homepage": "https://github.com/hirenchalodiya1/chrome-manifest-v3-webpack-hotreload-template#readme"
+  "dependencies": {
+    "interactjs": "^1.10.17"
+  }
 }
