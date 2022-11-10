@@ -1,6 +1,9 @@
 "use strict";
 
-export class ItemScraper {
+/*
+  商品ページ下部の「関連商品」や「この商品を購入した方は～」に出てくる商品
+*/
+export class ItemScraperRelated {
   constructor($content) {
     this.$content = $content;
   }
@@ -13,7 +16,7 @@ export class ItemScraper {
       item = {
         name : this.getName(),
         id : this.getId(),
-        url : location.href,
+        url : this.getUrl(),
         price : this.getPrice(),
         image : this.getImage(),
       };
@@ -23,15 +26,18 @@ export class ItemScraper {
     return item;
   }
   getName(){
-    return this.$content.querySelector('.cart_table h6').textContent;
+    return this.$content.querySelector('.syosai a').title;
   }
   getId(){
-    return this.$content.querySelector('.order_g .valiationlist_>input').value;
+    return this.$content.querySelector('input[name="goods"]').value;
+  }
+  getUrl(){
+    return this.$content.querySelector('.syosai a').href;
   }
   getPrice(){
     let price = 0;
 
-    const elems = this.$content.querySelectorAll(".order_g span");
+    const elems = this.$content.querySelectorAll(".f14b");
     for(let i=0; i<elems.length; i++){
       const $elem = elems[i];
       const text = $elem.textContent;
@@ -44,8 +50,6 @@ export class ItemScraper {
     return price;
   }
   getImage(){
-    // メイン画像のurlからサムネ画像のurlに変換
-    const url = this.$content.querySelector('#imglink').href;
-    return url.replace(/\/goods\/\w\//, '/goods/S/');
+    return this.$content.querySelector('.syosai img').src;
   }
 }

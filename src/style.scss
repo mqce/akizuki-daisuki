@@ -10,10 +10,10 @@
   position:fixed;
   left:10px;
   top:12px;
-  width:400px;
 
   header{
     position:relative;
+    display:inline-block;
     width:32px;
     height:32px;
 
@@ -39,15 +39,18 @@
   }
   .apl-body{
     display:none;
-    padding:16px 12px;
+    width:360px;
+    padding:12px;
     background:#fff;
     box-shadow: rgb(0 0 0 / 50%) 0px 2px 4px 0px;
     border-radius: 3px;
+    z-index: 1;
+    position: relative;
   }
   .apl-body.apl-active{
     display:block;
   }
-  .apl-body{
+  .apl-list{
     max-height:calc(100vh - 60px);
     overflow-y: auto;
 
@@ -59,24 +62,23 @@
     li{
       display:flex;
       align-items: center;
-      height: 30px;
+      height: 24px;
     }
   }
 
-
   .apl-item-remove{
-    background:url(chrome-extension://__MSG_@@extension_id__/img/remove.svg) 0 0 / 100% 100% no-repeat;
     width:20px;
     height:20px;
+    background:url(chrome-extension://__MSG_@@extension_id__/img/remove.svg) center center / 16px 16px no-repeat;
     cursor: pointer;
-
   }
   .apl-item-thumb{
     width:32px;
+    max-height:24px;
     margin:0 6px;
   }
   .apl-item-name{
-    width:260px;
+    flex:1;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -91,19 +93,26 @@
     display: flex;
     justify-content: flex-end;
   }
+  .apl-cart-button{
+    font-size: 12px;
+    padding:0 5px;
+  }
 }
 
 
 /* add button */
-.cart_table h6{
-  display:flex;
-  justify-content: space-between;
+.cart_table h6,
+.kanren h6{
+  position:relative;
+  padding-right:32px;
 }
-
 .apl-save-button{
-  background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+  position:absolute;
+  right:5px;
+  top:2px;
   width:20px;
   height:20px;
+  background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
   cursor: pointer;
 }
 

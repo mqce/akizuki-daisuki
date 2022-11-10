@@ -70,7 +70,7 @@ export class ItemList {
   }
   addEvents(){
     const $body = this.$elem.querySelector('.apl-body');
-    this.$elem.querySelector('.apl-header-icon').addEventListener('click', e => {
+    this.$elem.querySelector('header').addEventListener('click', e => {
       $body.classList.toggle('apl-active');
     });
     this.$elem.querySelector('.apl-cart-button').addEventListener('click', e => {

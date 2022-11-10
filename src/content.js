@@ -1,8 +1,9 @@
 "use strict";
 
 import './style.scss';
-import { ItemScraper } from './modules/ItemScraper.js'
 import { ItemList } from './modules/ItemList.js'
+import { ItemScraper } from './modules/ItemScraper.js'
+import { ItemScraperRelated } from './modules/ItemScraperRelated.js'
 
 console.log('content.js');
 
@@ -15,30 +16,12 @@ function main(){
   // 商品ページならAddButtonを追加
   const $content = document.querySelector('#maincontents');
   if($content){
-    // 商品データをscrape
-    const item = getItemData($content);
-    console.log(item);
+    // リストに追加するボタンを挿入
+    addButton();
 
-    // 追加ボタンを描画
-    showAddButton($content, item);
+    // リストに追加するボタンを挿入(関連商品)
+    addButtonsRelated();
   }
-}
-
-function getItemData($content){
-  const scraper = new ItemScraper($content);
-  return scraper.item;
-}
-
-function showAddButton($content, item){
-  const $title = $content.querySelector('.cart_table h6');
-  const $button = document.createElement('div');
-  $button.classList.add('apl-save-button');
-  $title.appendChild($button);
-
-  $button.addEventListener('click', e=>{
-    itemList.add(item);
-  });
-  
 }
 
 async function showItemList(){
@@ -50,6 +33,44 @@ async function showItemList(){
   document.body.appendChild($div);
 }
 
+
+function addButton(){
+  const $content = document.querySelector('#maincontents');
+  // 商品データをscrape
+  const scraper = new ItemScraper($content);
+  const item = scraper.item;
+  console.log(item);
+
+  // 追加ボタンを描画
+  if(item){
+    const $parent = $content.querySelector('.cart_table h6');
+    appendAddButton($parent, item);
+  }
+}
+
+function addButtonsRelated(){
+  const $items = document.querySelectorAll('.kanren form>table');
+  $items.forEach($item => {
+    // 商品データをscrape
+    const scraper = new ItemScraperRelated($item);
+    const item = scraper.item;
+
+    // 追加ボタンを描画
+    if(item){
+      const $parent = $item.querySelector('h6');
+      appendAddButton($parent, item);
+    }
+  })
+}
+
+function appendAddButton($parent, item){
+  const $button = document.createElement('div');
+  $button.classList.add('apl-save-button');
+  $button.addEventListener('click', e=>{
+    itemList.add(item);
+  });
+  $parent.appendChild($button);
+}
 
 main();
 
