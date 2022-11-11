@@ -1,7 +1,3 @@
-#header{
-  opacity:0.1;
-}
-
 .akizuki-permanent-list{
   /* reset */
   *,*::before,*::after{box-sizing:border-box; margin:0; padding:0;}
@@ -40,7 +36,7 @@
   .apl-body{
     display:none;
     width:400px;
-    padding:12px;
+    padding:12px 12px 12px 10px;
     background:#fff;
     box-shadow: rgb(0 0 0 / 50%) 0px 2px 4px 0px;
     border-radius: 3px;
@@ -118,11 +114,16 @@
 
   footer{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
+  .apl-clear-button,
   .apl-cart-button{
-    font-size: 12px;
-    padding:0 5px;
+    border:none;
+    padding: 3px 6px;
+    background: #eee;
+    color: #333;
+    font-size: 11px;
+    border-radius: 3px;
   }
 }
 

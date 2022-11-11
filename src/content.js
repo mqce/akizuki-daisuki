@@ -7,7 +7,7 @@ import { ItemScraperRelated } from './modules/ItemScraperRelated.js'
 
 console.log('content.js');
 
-const ItemListPanel = new ItemListPanel();
+const itemListPanel = new ItemListPanel();
 
 function main(){
   // 欲しいものリストを表示
@@ -28,7 +28,7 @@ async function showItemList(){
   const $div = document.createElement('div');
   $div.classList.add('akizuki-permanent-list');
 
-  const $elem = await ItemListPanel.load();
+  const $elem = await itemListPanel.load();
   $div.appendChild($elem);
   document.body.appendChild($div);
 }
@@ -39,7 +39,6 @@ function addButton(){
   // 商品データをscrape
   const scraper = new ItemScraper($content);
   const item = scraper.item;
-  console.log(item);
 
   // 追加ボタンを描画
   if(item){
@@ -67,7 +66,7 @@ function appendAddButton($parent, item){
   const $button = document.createElement('div');
   $button.classList.add('apl-save-button');
   $button.addEventListener('click', e=>{
-    itemList.add(item);
+    itemListPanel.add(item);
   });
   $parent.appendChild($button);
 }

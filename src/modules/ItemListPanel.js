@@ -22,6 +22,8 @@ function replaceFullToHalf(str){
 }
 
 export class ItemListPanel {
+  DEFAULT_WIDTH = 400;
+  DEFAULT_HEIGHT = 'auto';
   constructor() {
     this.itemListData = new ItemListData();
 
@@ -37,8 +39,8 @@ export class ItemListPanel {
     this.list = await this.itemListData.load();
 
     // サイズをロード
-    this.bodyWidth = await storage.get('bodyWidth') || 400;
-    this.bodyHeight = await storage.get('bodyHeight') || 'auto';
+    this.bodyWidth = await storage.get('bodyWidth') || this.DEFAULT_WIDTH;
+    this.bodyHeight = await storage.get('bodyHeight') || this.DEFAULT_HEIGHT;
 
     // .akizuki-permanent-list直下に置くdivを作る
     this.$elem = document.createElement('div');
@@ -51,6 +53,13 @@ export class ItemListPanel {
 
     this.$elem.innerHTML = "";
     return this.build(isActive);
+  }
+  async clear(){
+    this.list = await this.itemListData.clear();
+    this.update();
+    this.bodyWidth = this.DEFAULT_WIDTH;
+    this.bodyHeight = this.DEFAULT_HEIGHT;
+    this.setBodySize();
   }
   add(item){
     this.list = this.itemListData.add(item);
@@ -69,29 +78,34 @@ export class ItemListPanel {
         <input type="hidden" name="input_type" value="True">
         <div class="apl-list"></div>
         <footer>
-          <button class="apl-cart-button">全てかごに入れる</button>
+          <button type="button" class="apl-clear-button">クリア</button>
+          <button type="submit" class="apl-cart-button">全てかごに入れる</button>
         </footer>
       </form>
     </div>
     `;
 
     this.$elem.setHTML(html, sanitizer);
-    const $body = this.$elem.querySelector('.apl-body');
-    const $list = this.$elem.querySelector('.apl-list');
+    this.$body = this.$elem.querySelector('.apl-body');
+    this.$list = this.$elem.querySelector('.apl-list');
+
     const $ul = this.ul();
-    $list.appendChild($ul);
+    this.$list.appendChild($ul);
 
     // bodyのサイズを復元
-    $body.style.width = this.bodyWidth + 'px';
-    $body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
-    this.interactable($body);
+    this.setBodySize();
+    this.interactable(this.$body);
 
     if(isActive){
-      $body.classList.add('apl-active');
+      this.$body.classList.add('apl-active');
     }
     this.addEvents();
 
     return this.$elem;
+  }
+  setBodySize(){
+    this.$body.style.width = this.bodyWidth === 'auto' ? 'auto' : this.bodyWidth + 'px';
+    this.$body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
   }
   addEvents(){
     const $body = this.$elem.querySelector('.apl-body');
@@ -101,9 +115,23 @@ export class ItemListPanel {
       $body.classList.toggle('apl-active');
     });
 
+    // リストをクリア
+    this.$elem.querySelector('.apl-clear-button').addEventListener('click', async e=>{
+      if(confirm('リストをクリアします')){
+        await this.clear();
+        return true;
+      }else{
+        e.preventDefault();
+      }
+    });
+
     // カートに入れる
     this.$elem.querySelector('.apl-cart-button').addEventListener('click', e => {
-      alert('cart')
+      if(confirm('全てカートに入れます')){
+        return true;
+      }else{
+        e.preventDefault();
+      }
     });
   }
   ul(){

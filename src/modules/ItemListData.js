@@ -12,7 +12,6 @@ export class ItemListData {
   }
   async load(){
     this.list = await storage.getArray('list') || [];
-    console.log(this.list);
     return this.list;
   }
   async save(){
@@ -30,6 +29,11 @@ export class ItemListData {
   }
   remove(id){
     this.list = this.list.filter(item => item.id !== id);
+    this.save();
+    return this.list;
+  }
+  clear(){
+    this.list = [];
     this.save();
     return this.list;
   }
