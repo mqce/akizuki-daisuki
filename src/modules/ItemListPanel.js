@@ -21,7 +21,7 @@ function replaceFullToHalf(str){
   .replace(/〜/g, "~");
 }
 
-export class ItemList {
+export class ItemListPanel {
   constructor() {
     this.itemListData = new ItemListData();
 
@@ -95,9 +95,13 @@ export class ItemList {
   }
   addEvents(){
     const $body = this.$elem.querySelector('.apl-body');
+
+    // パネル開閉
     this.$elem.querySelector('header').addEventListener('click', e => {
       $body.classList.toggle('apl-active');
     });
+
+    // カートに入れる
     this.$elem.querySelector('.apl-cart-button').addEventListener('click', e => {
       alert('cart')
     });

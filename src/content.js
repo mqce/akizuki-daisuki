@@ -1,13 +1,13 @@
 "use strict";
 
 import './style.scss';
-import { ItemList } from './modules/ItemList.js'
+import { ItemListPanel } from './modules/ItemListPanel.js'
 import { ItemScraper } from './modules/ItemScraper.js'
 import { ItemScraperRelated } from './modules/ItemScraperRelated.js'
 
 console.log('content.js');
 
-const itemList = new ItemList();
+const ItemListPanel = new ItemListPanel();
 
 function main(){
   // 欲しいものリストを表示
@@ -28,7 +28,7 @@ async function showItemList(){
   const $div = document.createElement('div');
   $div.classList.add('akizuki-permanent-list');
 
-  const $elem = await itemList.load();
+  const $elem = await ItemListPanel.load();
   $div.appendChild($elem);
   document.body.appendChild($div);
 }
