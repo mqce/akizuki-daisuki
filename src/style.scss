@@ -54,6 +54,24 @@
       width:100%;
       height:100%;
     }
+    /* resize handle */
+    &::after{
+      position:absolute;
+      right:2px;
+      bottom:2px;
+      content:"";
+      display: block;
+      width:10px;
+      height:10px;
+      background-image: linear-gradient(-45deg,
+        transparent 0%, transparent 20%,
+        #999 20%, #999 30%,
+        transparent 30%, transparent 40%,
+        #999 40%, #999 50%,
+        transparent 50%, transparent
+      );
+      background-size: 100% 100%;
+    }
   }
   .apl-body.apl-active{
     display:block;
