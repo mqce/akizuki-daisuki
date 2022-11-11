@@ -35,13 +35,16 @@
   }
   .apl-body{
     display:none;
+    position: absolute;
+    left: 0px;
+    top: 38px;
     width:400px;
     padding:12px 12px 12px 10px;
     background:#fff;
     box-shadow: rgb(0 0 0 / 50%) 0px 2px 4px 0px;
     border-radius: 3px;
     z-index: 1;
-    position: relative;
+
     /*
     resize: both;
     overflow: auto;
