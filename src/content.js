@@ -2,8 +2,7 @@
 
 import './style.scss';
 import { ItemListPanel } from './modules/ItemListPanel.js'
-import { ItemScraper } from './modules/ItemScraper.js'
-import { ItemScraperRelated } from './modules/ItemScraperRelated.js'
+import { ItemScraper, ItemScraperRelated, ItemScraperListPage } from './modules/ItemScraper.js'
 
 console.log('content.js');
 
@@ -14,13 +13,19 @@ function main(){
   showItemList();
 
   // 商品ページならAddButtonを追加
-  const $content = document.querySelector('#maincontents');
-  if($content){
+  const $maincontents = document.querySelector('#maincontents');
+  if($maincontents){
     // リストに追加するボタンを挿入
     addButton();
 
     // リストに追加するボタンを挿入(関連商品)
     addButtonsRelated();
+  }
+
+  // 一覧ページでもAddButtonを追加
+  const $mainframe = document.querySelector('.mainframe_');
+  if($mainframe){
+    addButtonsListPage();
   }
 }
 
@@ -57,6 +62,21 @@ function addButtonsRelated(){
     // 追加ボタンを描画
     if(item){
       const $parent = $item.querySelector('h6');
+      appendAddButton($parent, item);
+    }
+  })
+}
+
+function addButtonsListPage(){
+  const $items = document.querySelectorAll('.thumbox');
+  $items.forEach($item => {
+    // 商品データをscrape
+    const scraper = new ItemScraperListPage($item);
+    const item = scraper.item;
+
+    // 追加ボタンを描画
+    if(item){
+      const $parent = $item;
       appendAddButton($parent, item);
     }
   })

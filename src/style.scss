@@ -146,31 +146,14 @@
   background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
   cursor: pointer;
 }
+.mainframe_ .thumbox{
+  position:relative;
 
-
-
-.popup{
-  width:400px;
-
-  .akizuki-permanent-list{
-    width:100%;
-    position: relative;
+  .apl-save-button{
+    right:0;
+    top:0;
+    width:16px;
+    height:16px;
   }
-  .header{
-    display:none;
-    background:#FDE1F4;
-
-    h1{
-      display: inline-block;
-      background: linear-gradient(90deg, #e61912, #e99415);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      -webkit-text-stroke:1px #7d4e22;
-      font-size:20px;
-      font-weight: bold;
-    }
-  }
-
 }
 

@@ -1,6 +1,6 @@
 "use strict";
 
-export class ItemScraper {
+class ItemScraper {
   constructor($content) {
     this.$content = $content;
   }
@@ -13,7 +13,7 @@ export class ItemScraper {
       item = {
         name : this.getName(),
         id : this.getId(),
-        url : location.href,
+        url : this.getUrl(),
         price : this.getPrice(),
         image : this.getImage(),
       };
@@ -28,10 +28,11 @@ export class ItemScraper {
   getId(){
     return this.$content.querySelector('.order_g .valiationlist_>input').value;
   }
-  getPrice(){
+  getUrl(){
+    return location.href;
+  }
+  searchPriceFromElements(elems){
     let price = 0;
-
-    const elems = this.$content.querySelectorAll(".order_g span");
     for(let i=0; i<elems.length; i++){
       const $elem = elems[i];
       const text = $elem.textContent;
@@ -43,9 +44,66 @@ export class ItemScraper {
     }
     return price;
   }
+  getPrice(){
+    const elems = this.$content.querySelectorAll(".order_g span");
+    return this.searchPriceFromElements(elems);
+  }
   getImage(){
     // メイン画像のurlからサムネ画像のurlに変換
     const url = this.$content.querySelector('#imglink').href;
     return url.replace(/\/goods\/\w\//, '/goods/S/');
   }
 }
+
+/*
+  商品ページ下部の「関連商品」や「この商品を購入した方は～」に出てくる商品
+*/
+class ItemScraperRelated extends ItemScraper {
+  getName(){
+    return this.$content.querySelector('.syosai a').title;
+  }
+  getId(){
+    return this.$content.querySelector('input[name="goods"]').value;
+  }
+  getUrl(){
+    return this.$content.querySelector('.syosai a').href;
+  }
+  getPrice(){
+    const elems = this.$content.querySelectorAll(".f14b");
+    return this.searchPriceFromElements(elems);
+  }
+  getImage(){
+    return this.$content.querySelector('.syosai img').src;
+  }
+}
+
+/*
+  商品一覧ページ
+  「サムネイル」モードのみ対応
+*/
+class ItemScraperListPage extends ItemScraper {
+  getName(){
+    return this.$content.querySelector('.thumbox_pc .goods_name_').textContent;
+  }
+  getId(){
+    let id = '';
+    const src = this.$content.querySelector('.thumbox_img img').src;
+    const match = src.match(/\/([^\/]+)\.\w+?$/);
+    if(match){
+      id = match[1];
+    }
+    return id;
+  }
+  getUrl(){
+    return this.$content.querySelector('.goods_name_').href;
+  }
+  getPrice(){
+    const elems = this.$content.querySelectorAll(".f14b");
+    return this.searchPriceFromElements(elems);
+  }
+  getImage(){
+    return this.$content.querySelector('.thumbox_img img').src;
+  }
+}
+
+export {ItemScraper, ItemScraperRelated, ItemScraperListPage}
