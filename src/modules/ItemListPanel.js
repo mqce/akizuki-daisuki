@@ -57,16 +57,20 @@ export class ItemListPanel {
   async clear(){
     this.list = await this.itemListData.clear();
     this.update();
-    this.bodyWidth = this.DEFAULT_WIDTH;
-    this.bodyHeight = this.DEFAULT_HEIGHT;
-    this.setBodySize();
   }
   async add(item){
     this.list = await this.itemListData.add(item);
     this.update();
   }
-  build(isActive){
+  html(){
     const length = this.list.length || 0;
+
+    const footer = length ? `
+    <footer>
+      <button type="button" class="apl-clear-button">クリア</button>
+      <button type="submit" class="apl-cart-button">全てかごに入れる</button>
+    </footer>
+    ` : ``;
 
     const html = `
     <header>
@@ -77,44 +81,60 @@ export class ItemListPanel {
       <form method="POST" action="/catalog/cart/cart.aspx">
         <input type="hidden" name="input_type" value="True">
         <div class="apl-list"></div>
-        <footer>
-          <button type="button" class="apl-clear-button">クリア</button>
-          <button type="submit" class="apl-cart-button">全てかごに入れる</button>
-        </footer>
+        ${footer}
       </form>
     </div>
     `;
 
+    return html;
+  }
+  build(isActive){
+    const html = this.html();
     this.$elem.setHTML(html, sanitizer);
-    this.$body = this.$elem.querySelector('.apl-body');
-    this.$list = this.$elem.querySelector('.apl-list');
 
-    const $ul = this.ul();
-    this.$list.appendChild($ul);
+    const $body = this.$elem.querySelector('.apl-body');
+    const $list = this.$elem.querySelector('.apl-list');
+    this.addHeaderEvents();
 
-    // bodyのサイズを復元
-    this.setBodySize();
-    this.interactable(this.$body);
-
-    if(isActive){
-      this.$body.classList.add('apl-active');
+    if(this.list.length > 0){
+      // リストが空でない場合
+      const $ul = this.ul();
+      $list.appendChild($ul);
+      this.addButtonEvents();
+    }else{
+      // リストが空の場合
+      const $list = this.$elem.querySelector('.apl-list');
+      $list.innerHTML =  `
+      <div class="apl-empty">
+        <span class="apl-add-icon"></span>をクリックして商品を追加
+      </div>
+      `;
+      // デフォルトのサイズに戻す
+      this.bodyWidth = this.DEFAULT_WIDTH;
+      this.bodyHeight = this.DEFAULT_HEIGHT;
     }
-    this.addEvents();
+
+    // bodyの開閉状態・サイズを復元
+    this.setBodySize($body);
+    this.interactable($body);
+    if(isActive){
+      $body.classList.add('apl-active');
+    }
 
     return this.$elem;
   }
-  setBodySize(){
-    this.$body.style.width = this.bodyWidth === 'auto' ? 'auto' : this.bodyWidth + 'px';
-    this.$body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
+  setBodySize($body){
+    $body.style.width = this.bodyWidth === 'auto' ? 'auto' : this.bodyWidth + 'px';
+    $body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
   }
-  addEvents(){
-    const $body = this.$elem.querySelector('.apl-body');
-
+  addHeaderEvents(){
     // パネル開閉
+    const $body = this.$elem.querySelector('.apl-body');
     this.$elem.querySelector('header').addEventListener('click', e => {
       $body.classList.toggle('apl-active');
     });
-
+  }
+  addButtonEvents(){
     // リストをクリア
     this.$elem.querySelector('.apl-clear-button').addEventListener('click', async e=>{
       if(confirm('リストをクリアします')){
@@ -174,6 +194,7 @@ export class ItemListPanel {
   
     return $li;
   }
+  // パネルをリサイズ可能にする　css-resizeでは縦と横のハンドルが無いため
   interactable($elem){
     const self = this;
     interact($elem)

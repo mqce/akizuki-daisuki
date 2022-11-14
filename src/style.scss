@@ -91,6 +91,19 @@
       height: 24px;
     }
   }
+  /* リストが空の場合 */
+  .apl-empty{
+    background:#f2f2f2;
+    padding:4em 1em;
+    text-align:center;
+  }
+  .apl-add-icon{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    margin-right:2px;
+    background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+  }
 
   .apl-item-remove{
     width:20px;
