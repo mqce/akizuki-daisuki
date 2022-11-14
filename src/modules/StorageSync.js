@@ -23,7 +23,7 @@ QUOTA_BYTES
 QUOTA_BYTES_PER_ITEM
 8192
 */
-export class Storage {
+export class StorageSync {
   constructor() {
     this.storage = chrome.storage.sync;// chrome.storage.local
   }

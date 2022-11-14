@@ -1,7 +1,7 @@
 "use strict";
 
 import interact from 'interactjs'
-import { Storage } from './Storage.js'
+import Storage from './StorageLocal.js'
 import { ItemListData } from './ItemListData.js'
 
 // https://developer.mozilla.org/ja/docs/Web/API/Element/setHTML
@@ -61,8 +61,8 @@ export class ItemListPanel {
     this.bodyHeight = this.DEFAULT_HEIGHT;
     this.setBodySize();
   }
-  add(item){
-    this.list = this.itemListData.add(item);
+  async add(item){
+    this.list = await this.itemListData.add(item);
     this.update();
   }
   build(isActive){
@@ -160,8 +160,8 @@ export class ItemListPanel {
     $li.setHTML(html, sanitizer);
   
     // 削除ボタン
-    $li.querySelector('.apl-item-remove').addEventListener('click', e=>{
-      this.list = this.itemListData.remove(item.id);
+    $li.querySelector('.apl-item-remove').addEventListener('click', async e=>{
+      this.list = await this.itemListData.remove(item.id);
       this.update();
     });
     
