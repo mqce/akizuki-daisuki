@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Akizuki Permanent List",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "秋月電子で買い物リストを記録できます",
   "content_scripts": [
     {
