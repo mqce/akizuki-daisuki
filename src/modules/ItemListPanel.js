@@ -1,6 +1,6 @@
 "use strict";
 
-import interact from 'interactjs'
+import axios from 'axios';
 import Storage from './StorageLocal.js'
 import { ItemListData } from './ItemListData.js'
 
@@ -29,8 +29,8 @@ export class ItemListPanel {
 
     // ページ離脱前にサイズを保存
     window.addEventListener('beforeunload', async (e)=>{
-      await storage.set('bodyWidth', this.bodyWidth);
-      await storage.set('bodyHeight', this.bodyHeight);
+      e.preventDefault();
+      await this.saveBodySize();
       e.returnValue = '';
     });
   }
@@ -116,7 +116,6 @@ export class ItemListPanel {
 
     // bodyの開閉状態・サイズを復元
     this.setBodySize($body);
-    this.interactable($body);
     if(isActive){
       $body.classList.add('apl-active');
     }
@@ -126,6 +125,11 @@ export class ItemListPanel {
   setBodySize($body){
     $body.style.width = this.bodyWidth === 'auto' ? 'auto' : this.bodyWidth + 'px';
     $body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
+  }
+  async saveBodySize(){
+    const $body = this.$elem.querySelector('.apl-body');
+    await storage.set('bodyWidth', $body.clientWidth);
+    await storage.set('bodyHeight', $body.clientHeight);
   }
   addHeaderEvents(){
     // パネル開閉
@@ -170,12 +174,13 @@ export class ItemListPanel {
 
     const $li = document.createElement('li');
     const html = `
-    <div class="apl-item-remove"></div>
+    <input type="hidden" name="goods" value="${item.id}">
+    <input type="hidden" name="${item.id}_qty" value="1">
+    <div class="apl-item-remove" title="削除"></div>
     <img class="apl-item-thumb" src="${item.image}">
     <a href="${item.url}" class="apl-item-name" title="${name}">${name}</a>
     <span class="apl-item-price">&yen;${price}</span>
-    <input type="hidden" name="goods" value="${item.id}">
-    <input type="hidden" name="${item.id}_qty" value="1">
+    <span class="apl-item-cart" title="カートに入れる"></span>
     `;
     $li.setHTML(html, sanitizer);
   
@@ -184,42 +189,24 @@ export class ItemListPanel {
       this.list = await this.itemListData.remove(item.id);
       this.update();
     });
-    
-    /*
-    // リンクは新規タブで開く
-    $li.querySelector('.apl-item-name').addEventListener('click', e=>{
-      chrome.tabs.create({url:item.url});
-    });
-    */
-  
-    return $li;
-  }
-  // パネルをリサイズ可能にする　css-resizeでは縦と横のハンドルが無いため
-  interactable($elem){
-    const self = this;
-    interact($elem)
-    .resizable({
-      edges: { top: false, left: false, bottom: true, right: true },
-      listeners: {
-        move (event) {
-          let { x, y } = event.target.dataset
 
-          self.bodyWidth = event.rect.width;
-          self.bodyHeight = event.rect.height;
+    // カートに入れるボタン
+    $li.querySelector('.apl-item-cart').addEventListener('click', async e=>{
+      try {
+        const url = '/catalog/cart/cart.aspx';
+        const data = new FormData();
+        data.append("goods", item.id);
+        data.append(item.id + '_qty', "1");
+        const response = await axios.post(url, data);
+        console.log(response)
 
-          x = (parseFloat(x) || 0) + event.deltaRect.left
-          y = (parseFloat(y) || 0) + event.deltaRect.top
-
-          Object.assign(event.target.style, {
-            width: `${event.rect.width}px`,
-            height: `${event.rect.height}px`,
-            transform: `translate(${x}px, ${y}px)`
-          })
-
-          Object.assign(event.target.dataset, { x, y })
+        if(location.href.includes(url)){
+          location.href = url;
         }
+      } catch (e) {
+        console.error(e);
       }
-    })
-    return $elem;
+    });  
+    return $li;
   }
 }
