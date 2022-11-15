@@ -12,12 +12,10 @@ export class ItemListData {
   }
   async load(){
     const list = await storage.get('list') || [];
-    console.log('ItemListData::load',list);
     return list;
   }
   async save(list){
     await storage.set('list', list);
-    console.log('ItemListData::save',list);
     return list;
   }
   async find(id){

@@ -4,13 +4,16 @@ import './style.scss';
 import { ItemListPanel } from './modules/ItemListPanel.js'
 import { ItemScraper, ItemScraperRelated, ItemScraperListPage } from './modules/ItemScraper.js'
 
-console.log('content.js');
 
 const itemListPanel = new ItemListPanel();
 
 function main(){
   // 欲しいものリストを表示
-  showItemList();
+  // pdfやポップアップなどヘッダーのないページには表示しない
+  const $header = document.querySelector('#header');
+  if($header){
+    showItemList();
+  }
 
   // 商品ページならAddButtonを追加
   const $maincontents = document.querySelector('#maincontents');
