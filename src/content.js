@@ -33,14 +33,9 @@ function main(){
 }
 
 async function showItemList(){
-  const $div = document.createElement('div');
-  $div.classList.add('akizuki-permanent-list');
-
   const $elem = await itemListPanel.load();
-  $div.appendChild($elem);
-  document.body.appendChild($div);
+  document.body.appendChild($elem);
 }
-
 
 function addButton(){
   const $content = document.querySelector('#maincontents');

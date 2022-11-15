@@ -41,6 +41,7 @@
     width:400px;
     padding:12px 12px 12px 10px;
     background:#fff;
+    background: rgba(255,255,255,0.88);
     box-shadow: rgb(0 0 0 / 50%) 0px 2px 4px 0px;
     border-radius: 3px;
     z-index: 1;
@@ -72,7 +73,7 @@
     }
     */
   }
-  .apl-body.apl-active{
+  .apl-body.apl-is-active{
     display:block;
   }
   .apl-list{
@@ -92,18 +93,8 @@
       height: 28px;
     }
   }
-  /* リストが空の場合 */
   .apl-empty{
-    background:#f2f2f2;
-    padding:4em 1em;
-    text-align:center;
-  }
-  .apl-add-icon{
-    display:inline-block;
-    width:14px;
-    height:14px;
-    margin-right:2px;
-    background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+    display: none;
   }
 
   .apl-item-remove{
@@ -142,6 +133,11 @@
       top:1px;
       left:1px;
     }
+
+    &.apl-done{
+      opacity:0.2;
+      pointer-events: none;
+    }
   }
 
   footer{
@@ -159,8 +155,29 @@
   }
 }
 
+/* リストが空の場合 */
+.apl-is-empty{
+  .apl-empty{
+    display: block;
+    background:#f2f2f2;
+    padding:4em 1em;
+    text-align:center;
+  }
+  .apl-add-icon{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    margin-right:2px;
+    background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+  }
+  .apl-list,
+  footer{
+    display:none;
+  }
+}
 
-/* add button */
+
+/* リストに追加するボタン */
 .cart_table h6,
 .kanren h6{
   position:relative;

@@ -4,8 +4,7 @@ import axios from 'axios';
 import Storage from './StorageLocal.js'
 import { ItemListData } from './ItemListData.js'
 
-// https://developer.mozilla.org/ja/docs/Web/API/Element/setHTML
-const sanitizer = new Sanitizer();
+const sanitizer = new Sanitizer();// https://developer.mozilla.org/ja/docs/Web/API/Element/setHTML
 const storage = new Storage();
 
 // 全角to半角
@@ -24,121 +23,118 @@ function replaceFullToHalf(str){
 export class ItemListPanel {
   DEFAULT_WIDTH = 400;
   DEFAULT_HEIGHT = 'auto';
+  CLASSNAME = 'akizuki-permanent-list';
+  html = `
+  <header>
+    <div class="apl-header-icon"></div>
+    <div class="apl-header-length"></div>
+  </header>
+  <div class="apl-body">
+    <form method="POST" action="/catalog/cart/cart.aspx">
+      <input type="hidden" name="input_type" value="True">
+      <div class="apl-list">
+        <ul></ul>
+      </div>
+      <div class="apl-empty">
+        <span class="apl-add-icon"></span>をクリックして商品を追加
+      </div>
+      <footer>
+        <button type="button" class="apl-clear-button">クリア</button>
+        <button type="submit" class="apl-cart-button">全てかごに入れる</button>
+      </footer>
+    </form>
+  </div>
+  `;
   constructor() {
     this.itemListData = new ItemListData();
+    this.width = this.DEFAULT_WIDTH;
+    this.height = this.DEFAULT_HEIGHT;
 
     // ページ離脱前にサイズを保存
     window.addEventListener('beforeunload', async (e)=>{
       e.preventDefault();
-      await this.saveBodySize();
+      await this.#saveBodySize();
       e.returnValue = '';
     });
   }
   // chrome.storageに保存されているデータをロードしてリストDOMを生成
   async load(){
-    this.list = await this.itemListData.load();
+    // DOMを初期化
+    this.#init();
 
-    // サイズをロード
-    this.bodyWidth = await storage.get('bodyWidth') || this.DEFAULT_WIDTH;
-    this.bodyHeight = await storage.get('bodyHeight') || this.DEFAULT_HEIGHT;
+    // データをロード
+    this.list = await this.itemListData.load() || [];
 
-    // .akizuki-permanent-list直下に置くdivを作る
-    this.$elem = document.createElement('div');
-    return this.update();
-  }
-  // updateの度に全部書き換える
-  update(){
-    // active状態を維持する
-    const isActive = this.$elem.querySelector('.apl-active') !== null;
+    // DOM更新
+    this.#update();
 
-    this.$elem.innerHTML = "";
-    return this.build(isActive);
-  }
-  async clear(){
-    this.list = await this.itemListData.clear();
-    this.update();
-  }
-  async add(item){
-    this.list = await this.itemListData.add(item);
-    this.update();
-  }
-  html(){
-    const length = this.list.length || 0;
-
-    const footer = length ? `
-    <footer>
-      <button type="button" class="apl-clear-button">クリア</button>
-      <button type="submit" class="apl-cart-button">全てかごに入れる</button>
-    </footer>
-    ` : ``;
-
-    const html = `
-    <header>
-      <div class="apl-header-icon"></div>
-      <div class="apl-header-length">${length}</div>
-    </header>
-    <div class="apl-body">
-      <form method="POST" action="/catalog/cart/cart.aspx">
-        <input type="hidden" name="input_type" value="True">
-        <div class="apl-list"></div>
-        ${footer}
-      </form>
-    </div>
-    `;
-
-    return html;
-  }
-  build(isActive){
-    const html = this.html();
-    this.$elem.setHTML(html, sanitizer);
-
-    const $body = this.$elem.querySelector('.apl-body');
-    const $list = this.$elem.querySelector('.apl-list');
-    this.addHeaderEvents();
-
-    if(this.list.length > 0){
-      // リストが空でない場合
-      const $ul = this.ul();
-      $list.appendChild($ul);
-      this.addButtonEvents();
-    }else{
-      // リストが空の場合
-      const $list = this.$elem.querySelector('.apl-list');
-      $list.innerHTML =  `
-      <div class="apl-empty">
-        <span class="apl-add-icon"></span>をクリックして商品を追加
-      </div>
-      `;
-      // デフォルトのサイズに戻す
-      this.bodyWidth = this.DEFAULT_WIDTH;
-      this.bodyHeight = this.DEFAULT_HEIGHT;
-    }
-
-    // bodyの開閉状態・サイズを復元
-    this.setBodySize($body);
-    if(isActive){
-      $body.classList.add('apl-active');
-    }
+    // サイズをロードして適用
+    await this.#loadBodySize();
+    this.#setBodySize();
 
     return this.$elem;
   }
-  setBodySize($body){
-    $body.style.width = this.bodyWidth === 'auto' ? 'auto' : this.bodyWidth + 'px';
-    $body.style.height = this.bodyHeight === 'auto' ? 'auto' : this.bodyHeight + 'px';
+  async clear(){
+    this.list = await this.itemListData.clear();
+    this.#update();
   }
-  async saveBodySize(){
-    const $body = this.$elem.querySelector('.apl-body');
-    await storage.set('bodyWidth', $body.clientWidth);
-    await storage.set('bodyHeight', $body.clientHeight);
+  async add(item){
+    this.list = await this.itemListData.add(item);
+    this.#update();
   }
-  addHeaderEvents(){
-    // パネル開閉
-    const $body = this.$elem.querySelector('.apl-body');
-    this.$elem.querySelector('header').addEventListener('click', e => {
-      $body.classList.toggle('apl-active');
+  #init(){
+    // DOMを初期化
+    this.$elem = document.createElement('div');
+    this.$elem.classList.add(this.CLASSNAME);
+    this.$elem.setHTML(this.html, sanitizer);
+    this.$body = this.$elem.querySelector('.apl-body');
+    this.#addEvents();
+  }
+  #update(){
+    // 件数バッジを更新
+    this.$elem.querySelector('.apl-header-length').textContent = this.list.length;
+
+    // リストが空の場合
+    if(this.list.length === 0){
+      // デフォルトのサイズに戻す
+      this.#resetBodySize();
+      this.$elem.classList.add('apl-is-empty');
+    }else{
+      this.$elem.classList.remove('apl-is-empty');
+    }
+
+    // リストを更新
+    const $ul = this.$elem.querySelector('.apl-list>ul');
+    $ul.innerHTML = "";
+    this.list.map(item=>{
+      const $li = this.#li(item);
+      $ul.appendChild($li);
     });
   }
-  addButtonEvents(){
+  #resetBodySize(){
+    this.width = this.DEFAULT_WIDTH;
+    this.height = this.DEFAULT_HEIGHT;
+    this.#setBodySize();
+  }
+  #setBodySize(){
+    this.$body.style.width = this.width === 'auto' ? 'auto' : this.width + 'px';
+    this.$body.style.height = this.height === 'auto' ? 'auto' : this.height + 'px';
+  }
+  async #loadBodySize(){
+    this.width = await storage.get('bodyWidth') || this.DEFAULT_WIDTH;
+    this.height = await storage.get('bodyHeight') || this.DEFAULT_HEIGHT;
+  }
+  async #saveBodySize(){
+    await storage.set('bodyWidth', this.width);
+    await storage.set('bodyHeight', this.height);
+  }
+
+  #addEvents(){
+    // パネル開閉
+    this.$elem.querySelector('header').addEventListener('click', e => {
+      this.$body.classList.toggle('apl-is-active');
+    });
+
     // リストをクリア
     this.$elem.querySelector('.apl-clear-button').addEventListener('click', async e=>{
       if(confirm('リストをクリアします')){
@@ -157,17 +153,23 @@ export class ItemListPanel {
         e.preventDefault();
       }
     });
+
+    this.#attachResizeEvent();
   }
-  ul(){
-    const $ul = document.createElement('ul');
-    this.list.map(item=>{
-      const $li = this.li(item);
-      $ul.appendChild($li);
-    });
-    return $ul;
+  // apl-bodyのcss-resizeを拾う
+  #attachResizeEvent(){
+    const $elem = this.$body;
+    const observer = new MutationObserver(() => {
+      this.width = $elem.getBoundingClientRect().width
+      this.height = $elem.getBoundingClientRect().height
+    })
+    observer.observe($elem, {
+      attriblutes: true,
+      attributeFilter: ["style"]
+    })
   }
   // 商品一件分のHTMLを生成
-  li(item){
+  #li(item){
     const formatter = new Intl.NumberFormat('ja-JP');
     const name = replaceFullToHalf(item.name);
     const price = formatter.format(item.price);
@@ -187,26 +189,35 @@ export class ItemListPanel {
     // 削除ボタン
     $li.querySelector('.apl-item-remove').addEventListener('click', async e=>{
       this.list = await this.itemListData.remove(item.id);
-      this.update();
+      this.#update();
     });
 
     // カートに入れるボタン
     $li.querySelector('.apl-item-cart').addEventListener('click', async e=>{
-      try {
-        const url = '/catalog/cart/cart.aspx';
-        const data = new FormData();
-        data.append("goods", item.id);
-        data.append(item.id + '_qty', "1");
-        const response = await axios.post(url, data);
-        console.log(response)
-
-        if(location.href.includes(url)){
-          location.href = url;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+      this.#addSingleItemToCart(e.target, item.id);
     });  
     return $li;
+  }
+  async #addSingleItemToCart($elem, id){
+    $elem.classList.remove('apl-done');
+    try {
+      const url = '/catalog/cart/cart.aspx';
+      const data = new FormData();
+      data.append('goods', id);
+      data.append(id + '_qty', 1);
+      const response = await axios.post(url, data);
+
+      // カートに入れた動きをつける
+      if(response.status == 200){
+        $elem.classList.add('apl-done');
+      }
+
+      // カートページにいる場合はリロードする
+      if(location.href.includes(url)){
+        location.href = url;
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

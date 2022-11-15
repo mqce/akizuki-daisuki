@@ -7,7 +7,7 @@ QUOTA_BYTES
 */
 export default class StorageLocal {
   constructor() {
-    this.storage = chrome.storage.local;// chrome.storage.local
+    this.storage = chrome.storage.local;
   }
   async get(key){
     const data = await this.storage.get(key);
