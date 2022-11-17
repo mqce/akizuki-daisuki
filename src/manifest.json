@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Akizuki Permanent List",
-  "version": "0.1.0",
-  "description": "秋月電子で買い物リストを記録できます",
+  "name": "秋月電子 買い物リスト",
+  "version": "0.1.1",
+  "description": "秋月電子で買い物リストを作成・記録できます",
   "content_scripts": [
     {
       "matches": ["https://akizukidenshi.com/*"],
@@ -13,7 +13,7 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "permissions": ["tabs", "scripting", "storage"],
+  "permissions": ["scripting", "storage"],
   "web_accessible_resources": [{
     "resources": [
       "img/*"
