@@ -203,3 +203,50 @@
   }
 }
 
+/* 拡大鏡 */
+.cart_table .syosai{
+  position:relative;
+}
+.syosai #imglink{
+  display: block;
+  position: relative;
+  cursor: zoom-in;
+}
+.apl-img-loupe{
+  display:none;
+  position:absolute;
+  left:0;
+  top:0;
+  width:300px;
+  height:300px;
+  pointer-events: none;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  border:#111 1px solid;
+  z-index: 1;
+}
+
+/* 店舗在庫 */
+.detail_stocktitle_{
+  table{
+    width:100%;
+    margin-top:10px;
+    border-collapse: collapse;
+  }
+  th,td{
+    border:#ddd 1px solid;
+    font-weight:normal;
+    text-align: left;
+    padding:5px;
+  }
+  th{
+    background:#eee;
+  }
+  .storeqty_ {
+    text-align: center;
+    font-weight: bold;
+  }
+  .storename_title_{
+    padding:0;
+  }
+}

@@ -1,10 +1,13 @@
 "use strict";
 
+import axios from 'axios';
 import './style.scss';
+
 import { ItemListPanel } from './modules/ItemListPanel.js'
 import { ItemScraper, ItemScraperRelated, ItemScraperListPage } from './modules/ItemScraper.js'
+import  Loupe  from './modules/Loupe.js'
 
-
+const sanitizer = new Sanitizer();
 const itemListPanel = new ItemListPanel();
 
 function main(){
@@ -18,11 +21,21 @@ function main(){
   // 商品ページならAddButtonを追加
   const $maincontents = document.querySelector('#maincontents');
   if($maincontents){
+    // 商品データをscrape
+    const scraper = new ItemScraper($maincontents);
+    const item = scraper.item;
+
     // リストに追加するボタンを挿入
-    addButton();
+    addButton(item);
 
     // リストに追加するボタンを挿入(関連商品)
     addButtonsRelated();
+
+    // 拡大鏡を適用
+    applyLoupe();
+
+    // 在庫情報を追加
+    showWarehouseInfo(item.id);
   }
 
   // 一覧ページでもAddButtonを追加
@@ -37,15 +50,10 @@ async function showItemList(){
   document.body.appendChild($elem);
 }
 
-function addButton(){
-  const $content = document.querySelector('#maincontents');
-  // 商品データをscrape
-  const scraper = new ItemScraper($content);
-  const item = scraper.item;
-
+function addButton(item){
   // 追加ボタンを描画
   if(item){
-    const $parent = $content.querySelector('.cart_table h6');
+    const $parent = document.querySelector('.cart_table h6');
     appendAddButton($parent, item);
   }
 }
@@ -87,6 +95,37 @@ function appendAddButton($parent, item){
     itemListPanel.add(item);
   });
   $parent.appendChild($button);
+}
+
+// 商品画像に拡大鏡を表示
+function applyLoupe(){
+  const $container = document.querySelector('.syosai #imglink');
+  const loupe = new Loupe();
+  loupe.applyTo($container);
+}
+
+// 店舗在庫表示
+async function showWarehouseInfo(id){
+  try{
+    // 本来ポップアップで開く画面のhtmlを非同期で取得
+    const url = '/catalog/goods/warehouseinfo.aspx';
+    const response = await axios.get(url, {
+      params: {
+        goods: id
+      }
+    });
+    if(response.status == 200){
+      const html = response.data;
+      const $tmp = document.createElement('div');
+      $tmp.setHTML(html, sanitizer);
+  
+      // 「店舗情報を取得」の下に在庫表を表示 
+      const $table = $tmp.querySelector('#detail_stockinfo table');
+      document.querySelector('.detail_stocktitle_').append($table);
+    }
+  }catch(e){
+    console.error(e);
+  }
 }
 
 main();
