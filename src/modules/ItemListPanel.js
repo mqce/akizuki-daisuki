@@ -122,11 +122,13 @@ export class ItemListPanel {
   }
   async #loadBodySize(){
     this.width = await storage.get('bodyWidth') || this.DEFAULT_WIDTH;
-    this.height = await storage.get('bodyHeight') || this.DEFAULT_HEIGHT;
+    // this.height = await storage.get('bodyHeight') || this.DEFAULT_HEIGHT;
+    // heightはautoが良い
+    this.height = this.DEFAULT_HEIGHT;
   }
   async #saveBodySize(){
     await storage.set('bodyWidth', this.width);
-    await storage.set('bodyHeight', this.height);
+    // await storage.set('bodyHeight', this.height);
   }
 
   #addEvents(){

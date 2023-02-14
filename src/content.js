@@ -31,6 +31,9 @@ function main(){
     // リストに追加するボタンを挿入(関連商品)
     addButtonsRelated();
 
+    // 大きい商品画像を表示
+    enlargeImages();
+
     // 拡大鏡を適用
     applyLoupe();
 
@@ -95,6 +98,12 @@ function appendAddButton($parent, item){
     itemListPanel.add(item);
   });
   $parent.appendChild($button);
+}
+
+
+function enlargeImages(){
+  const $img = document.querySelector('.syosai #imglink img');
+  $img.src = $img.src.replace('/img/goods/L/', '/img/goods/C/');
 }
 
 // 商品画像に拡大鏡を表示
