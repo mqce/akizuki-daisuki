@@ -2,6 +2,7 @@
 
 import './style.scss';
 
+import { Bookmark } from './modules/Bookmark'
 import { ItemListPanel } from './modules/ItemListPanel'
 import { PageDetail } from './pages/PageDetail'
 import { PageList } from './pages/PageList'
@@ -12,6 +13,10 @@ function main(){
   const $header = document.querySelector('#header');
   if($header){
     showItemList();
+
+
+    const b = new Bookmark();
+    b.scrape();
   }
 
   // 詳細ページ

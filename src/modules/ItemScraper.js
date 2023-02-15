@@ -36,7 +36,7 @@ class ItemScraper {
     for(let i=0; i<elems.length; i++){
       const $elem = elems[i];
       const text = $elem.textContent;
-      const match = text.trim().match(/^￥([0-9,]+)$/);
+      const match = text.trim().match(/[¥￥]([0-9,]+)$/);
       if(match){
         price = parseInt(match[1].replace(/,/g, ''));
         break;
@@ -106,4 +106,27 @@ class ItemScraperListPage extends ItemScraper {
   }
 }
 
-export {ItemScraper, ItemScraperRelated, ItemScraperListPage}
+/*
+  商品一覧ページ
+  「サムネイル」モードのみ対応
+*/
+class ItemScraperBookmark extends ItemScraper {
+  getName(){
+    return this.$content.querySelector('.goods_name_').textContent;
+  }
+  getId(){
+    return this.$content.querySelector('input[name="cart_goods"]').value;
+  }
+  getUrl(){
+    return this.$content.querySelector('.goods_name_').href;
+  }
+  getPrice(){
+    const elems = this.$content.querySelectorAll("font");
+    return this.searchPriceFromElements(elems);
+  }
+  getImage(){
+    return this.$content.querySelector('img').src;
+  }
+}
+
+export {ItemScraper, ItemScraperRelated, ItemScraperListPage, ItemScraperBookmark}
