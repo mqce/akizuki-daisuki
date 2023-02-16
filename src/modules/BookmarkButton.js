@@ -15,6 +15,7 @@ export class BookmarkButton {
   #createDom(){
     const $elem = document.createElement('div');
     $elem.classList.add('apl-save-button');
+
     if(this.bookmark.find(this.item.id)){
       $elem.classList.add('active');
       this.isBookmarked = true;
@@ -27,12 +28,10 @@ export class BookmarkButton {
   #addEvent($elem){
     $elem.addEventListener('click', e=>{
       if(this.isBookmarked){
-        console.log('remove',this.item.id)
         this.bookmark.remove(this.item.id);
         $elem.classList.remove('active');
         this.isBookmarked = false;
       }else{
-        console.log('add',this.item.id)
         this.bookmark.add(this.item.id);
         $elem.classList.add('active');
         this.isBookmarked = true;

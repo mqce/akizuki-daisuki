@@ -10,6 +10,8 @@ import { PageList } from './pages/PageList'
 const bookmark = new Bookmark();
 
 async function main(){
+  await bookmark.init();
+
   // 欲しいものリストを表示
   // pdfやポップアップなどヘッダーのないページには表示しない
   const $header = document.querySelector('#header');
@@ -20,7 +22,6 @@ async function main(){
   // 詳細ページ
   const $maincontents = document.querySelector('#maincontents');
   if($maincontents){
-    await bookmark.init();
     const pageDetail = new PageDetail($maincontents, bookmark);
     pageDetail.init();
   }
@@ -28,7 +29,7 @@ async function main(){
   // 一覧ページ
   const $mainframe = document.querySelector('.mainframe_');
   if($mainframe){
-    const pageList = new PageList($mainframe);
+    const pageList = new PageList($mainframe, bookmark);
     pageList.init();
   }
 }

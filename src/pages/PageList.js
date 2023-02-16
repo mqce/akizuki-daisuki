@@ -1,10 +1,12 @@
 "use strict";
 
+import { BookmarkButton } from '../modules/BookmarkButton'
 import { ItemScraperListPage } from '../modules/ItemScraper.js'
 
 export class PageList {
-  constructor($contents) {
+  constructor($contents, bookmark) {
     this.$contents = $contents;
+    this.bookmark = bookmark;
   }
   init(){
     const $items = document.querySelectorAll('.thumbox');
@@ -21,12 +23,8 @@ export class PageList {
     })
   }
   appendAddButton($parent, item){
-    const $button = document.createElement('div');
-    $button.classList.add('apl-save-button');
-    $button.addEventListener('click', e=>{
-      //itemListPanel.add(item);
-      alert('TODO')
-    });
+    const button = new BookmarkButton(item, this.bookmark);
+    const $button = button.create();
     $parent.appendChild($button);
   }
 }
