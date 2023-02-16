@@ -36,7 +36,7 @@ export class ItemListPanel {
         <ul></ul>
       </div>
       <div class="apl-empty">
-        <span class="apl-add-icon"></span>をクリックして商品を追加
+        <span class="apl-add-icon"></span>をクリックしてブックマーク
       </div>
       <footer>
         <button type="button" class="apl-clear-button">クリア</button>

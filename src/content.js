@@ -7,22 +7,21 @@ import { ItemListPanel } from './modules/ItemListPanel'
 import { PageDetail } from './pages/PageDetail'
 import { PageList } from './pages/PageList'
 
-function main(){
+const bookmark = new Bookmark();
+
+async function main(){
   // 欲しいものリストを表示
   // pdfやポップアップなどヘッダーのないページには表示しない
   const $header = document.querySelector('#header');
   if($header){
     showItemList();
-
-
-    const b = new Bookmark();
-    b.scrape();
   }
 
   // 詳細ページ
   const $maincontents = document.querySelector('#maincontents');
   if($maincontents){
-    const pageDetail = new PageDetail($maincontents);
+    await bookmark.init();
+    const pageDetail = new PageDetail($maincontents, bookmark);
     pageDetail.init();
   }
 

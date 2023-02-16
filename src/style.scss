@@ -113,7 +113,7 @@ body{
     height:32px;
 
     .apl-header-icon{
-      background:url(chrome-extension://__MSG_@@extension_id__/img/icon.svg) 0 0 / 100% 100% no-repeat;
+      background:url(chrome-extension://__MSG_@@extension_id__/img/bookmarks.svg) 0 0 / 100% 100% no-repeat;
       width:32px;
       height:32px;
       cursor: pointer;
@@ -254,20 +254,21 @@ body{
   }
 }
 
-/* リストが空の場合 */
+/* ブックマークが空の場合 */
 .apl-is-empty{
   .apl-empty{
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background:#f2f2f2;
-    padding:4em 1em;
-    text-align:center;
+    padding:1em;
   }
   .apl-add-icon{
     display:inline-block;
-    width:14px;
-    height:14px;
+    width:20px;
+    height:20px;
     margin-right:2px;
-    background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+    background:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg) 0 0 / 100% 100% no-repeat;
   }
   .apl-list,
   footer{
@@ -276,7 +277,7 @@ body{
 }
 
 
-/* リストに追加するボタン */
+/* お気に入りボタン */
 .cart_table h6,
 .kanren h6{
   position:relative;
@@ -286,24 +287,28 @@ body{
   position:absolute;
   right:5px;
   top:2px;
-  width:20px;
-  height:20px;
-  background:url(chrome-extension://__MSG_@@extension_id__/img/save.svg) 0 0 / 100% 100% no-repeat;
+  width:32px;
+  height:32px;
+  background:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg) 0 0 / 100% 100% no-repeat;
   cursor: pointer;
 
   &:active{
     right:4px;
     top:3px;
   }
+  &.active{
+    background-image:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_on.svg);
+  }
 }
+/* 一覧ページのお気に入りボタン */
 .mainframe_ .thumbox{
   position:relative;
 
   .apl-save-button{
     right:0;
     top:0;
-    width:16px;
-    height:16px;
+    width:24px;
+    height:24px;
 
     
     &:active{

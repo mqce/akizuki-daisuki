@@ -1,13 +1,15 @@
 "use strict";
 
 import axios from 'axios';
+import { BookmarkButton } from '../modules/BookmarkButton'
 import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper.js'
 import  Loupe  from '../modules/Loupe.js'
 const sanitizer = new Sanitizer();
 
 export class PageDetail {
-  constructor($contents) {
+  constructor($contents, bookmark) {
     this.$contents = $contents;
+    this.bookmark = bookmark;
   }
   init(){
     // 商品データをscrape
@@ -52,12 +54,8 @@ export class PageDetail {
   }
 
   appendAddButton($parent, item){
-    const $button = document.createElement('div');
-    $button.classList.add('apl-save-button');
-    $button.addEventListener('click', e=>{
-      //itemListPanel.add(item);
-      alert('TODO')
-    });
+    const button = new BookmarkButton(item, this.bookmark);
+    const $button = button.create();
     $parent.appendChild($button);
   }
 

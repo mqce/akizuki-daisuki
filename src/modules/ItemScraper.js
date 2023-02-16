@@ -23,10 +23,10 @@ class ItemScraper {
     return item;
   }
   getName(){
-    return this.$content.querySelector('.cart_table h6').textContent;
+    return this.$content.querySelector('.cart_table h6')?.textContent;
   }
   getId(){
-    return this.$content.querySelector('.order_g .valiationlist_>input').value;
+    return this.$content.querySelector('.order_g .valiationlist_>input')?.value;
   }
   getUrl(){
     return location.href;
@@ -50,7 +50,7 @@ class ItemScraper {
   }
   getImage(){
     // メイン画像のurlからサムネ画像のurlに変換
-    const url = this.$content.querySelector('#imglink').href;
+    const url = this.$content.querySelector('#imglink')?.href;
     return url.replace(/\/goods\/\w\//, '/goods/S/');
   }
 }
@@ -60,20 +60,20 @@ class ItemScraper {
 */
 class ItemScraperRelated extends ItemScraper {
   getName(){
-    return this.$content.querySelector('.syosai a').title;
+    return this.$content.querySelector('.syosai a')?.title;
   }
   getId(){
-    return this.$content.querySelector('input[name="goods"]').value;
+    return this.$content.querySelector('input[name="goods"]')?.value;
   }
   getUrl(){
-    return this.$content.querySelector('.syosai a').href;
+    return this.$content.querySelector('.syosai a')?.href;
   }
   getPrice(){
     const elems = this.$content.querySelectorAll(".f14b");
     return this.searchPriceFromElements(elems);
   }
   getImage(){
-    return this.$content.querySelector('.syosai img').src;
+    return this.$content.querySelector('.syosai img')?.src;
   }
 }
 
@@ -83,11 +83,11 @@ class ItemScraperRelated extends ItemScraper {
 */
 class ItemScraperListPage extends ItemScraper {
   getName(){
-    return this.$content.querySelector('.thumbox_pc .goods_name_').textContent;
+    return this.$content.querySelector('.thumbox_pc .goods_name_')?.textContent;
   }
   getId(){
     let id = '';
-    const src = this.$content.querySelector('.thumbox_img img').src;
+    const src = this.$content.querySelector('.thumbox_img img')?.src;
     const match = src.match(/\/([^\/]+)\.\w+?$/);
     if(match){
       id = match[1];
@@ -95,37 +95,55 @@ class ItemScraperListPage extends ItemScraper {
     return id;
   }
   getUrl(){
-    return this.$content.querySelector('.goods_name_').href;
+    return this.$content.querySelector('.goods_name_')?.href;
   }
   getPrice(){
     const elems = this.$content.querySelectorAll(".f14b");
     return this.searchPriceFromElements(elems);
   }
   getImage(){
-    return this.$content.querySelector('.thumbox_img img').src;
+    return this.$content.querySelector('.thumbox_img img')?.src;
   }
 }
 
 /*
-  商品一覧ページ
-  「サムネイル」モードのみ対応
+  お気に入りページ
 */
 class ItemScraperBookmark extends ItemScraper {
+  get item(){
+    let item = null;
+    try{
+      item = {
+        name : this.getName(),
+        id : this.getId(),
+        url : this.getUrl(),
+        price : this.getPrice(),
+        image : this.getImage(),
+        bookmarkId : this.getBookmarkId(),// special
+      };
+    }catch(e){
+
+    }
+    return item;
+  }
   getName(){
-    return this.$content.querySelector('.goods_name_').textContent;
+    return this.$content.querySelector('.goods_name_')?.textContent;
   }
   getId(){
-    return this.$content.querySelector('input[name="cart_goods"]').value;
+    return this.$content.querySelector('input[name="cart_goods"]')?.value;
   }
   getUrl(){
-    return this.$content.querySelector('.goods_name_').href;
+    return this.$content.querySelector('.goods_name_')?.href;
   }
   getPrice(){
     const elems = this.$content.querySelectorAll("font");
     return this.searchPriceFromElements(elems);
   }
   getImage(){
-    return this.$content.querySelector('img').src;
+    return this.$content.querySelector('img')?.src;
+  }
+  getBookmarkId(){
+    return this.$content.nextElementSibling.querySelector('input[name="bookmark"]')?.value;
   }
 }
 
