@@ -17,13 +17,18 @@ export class Bookmark {
   constructor() {
   }
   async init(){
-    this.#items = await this.getItems();
+    return await this.getItems();
   }
   // ブックマークページから商品情報を取得
   async getItems(){
     const data = await this.#get();
-    const items = this.#parse(data);
-    return items;
+
+    if(data){
+      this.#items = this.#parse(data);
+      return true;
+    }else{
+      return false;
+    }
   }
   find(id){
     return this.#items.find(item => item.id === id);
@@ -36,7 +41,13 @@ export class Bookmark {
     const data = await this.#get({
       goods : id
     });
-    this.#items = this.#parse(data);// this.#itemsを更新
+
+    if(data){
+      this.#items = this.#parse(data);// this.#itemsを更新
+      return true;
+    }else{
+      return false;
+    }
   }
   async remove(id){
     // 存在確認
@@ -44,13 +55,20 @@ export class Bookmark {
     if(!item || !item.bookmarkId) return false;
 
     // 都度リクエストを投げる
+    // 削除時はブックマークIDと削除キーのペアが必要
     const deleteKey = 'del_' + item.bookmarkId;
     const data = await this.#post({
       [deleteKey] : true,
       'bookmark' : item.bookmarkId,
-      'update.x': '更新・削除'
+      'update.x': '更新・削除'// 削除ボタンのnameとvalue
     });
-    this.#items = this.#parse(data);// this.#itemsを更新
+
+    if(data){
+      this.#items = this.#parse(data);// this.#itemsを更新
+      return true;
+    }else{
+      return false;
+    }
   }
   clear(){
 
@@ -78,6 +96,9 @@ export class Bookmark {
       });
       if(response.status == 200){
         data = response.data;
+        if(data.includes('ログインしてください')){
+          data = null;
+        }
       }
     }catch(e){
       console.error(e);
@@ -94,6 +115,9 @@ export class Bookmark {
       const response = await axios.post(URL_BOOKMARK, form);
       if(response.status == 200){
         data = response.data;
+        if(data.includes('ログインしてください')){
+          data = null;
+        }
       }
     }catch(e){
       console.error(e);

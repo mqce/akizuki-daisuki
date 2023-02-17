@@ -1,6 +1,8 @@
 "use strict";
-
-
+/**
+ * BookmarkButton
+ * 商品ページ、一覧ページに表示するブックマーク追加・削除ボタン
+ */
 export class BookmarkButton {
   constructor(item, bookmark) {
     this.item = item;
@@ -8,11 +10,12 @@ export class BookmarkButton {
     this.isBookmarked = false;
   }
   create(){
-    const $elem = this.#createDom();
+    const $elem = this.#createElem();
     this.#addEvent($elem);
     return $elem;
   }
-  #createDom(){
+  // ブックマークボタンのDOM
+  #createElem(){
     const $elem = document.createElement('div');
     $elem.classList.add('apl-save-button');
 
@@ -25,17 +28,31 @@ export class BookmarkButton {
     }
     return $elem;
   }
+  // ボタンをクリックでブックマーク状態をtoggleする
   #addEvent($elem){
-    $elem.addEventListener('click', e=>{
+    let isBusy = false;
+    $elem.addEventListener('click', async e=>{
+      if(isBusy) return;// 連打対策
+      isBusy = true;
       if(this.isBookmarked){
-        this.bookmark.remove(this.item.id);
-        $elem.classList.remove('active');
-        this.isBookmarked = false;
+        if(await this.bookmark.remove(this.item.id)){
+          $elem.classList.remove('active');
+          this.isBookmarked = false;
+        }else{
+          this.#requireLogin();
+        }
       }else{
-        this.bookmark.add(this.item.id);
-        $elem.classList.add('active');
-        this.isBookmarked = true;
+        if(await this.bookmark.add(this.item.id)){
+          $elem.classList.add('active');
+          this.isBookmarked = true;
+        }else{
+          this.#requireLogin();
+        }
       }
+      isBusy = false;
     });
+  }
+  #requireLogin(){
+    alert('ログインが必要です');
   }
 }
