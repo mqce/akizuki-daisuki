@@ -7,29 +7,36 @@ import  Loupe  from '../modules/Loupe.js'
 const sanitizer = new Sanitizer();
 
 export class PageDetail {
-  constructor($contents, bookmark) {
+  constructor($contents, bookmark, config) {
     this.$contents = $contents;
     this.bookmark = bookmark;
+    this.config = config;
   }
   init(){
     // 商品データをscrape
     const scraper = new ItemScraper(this.$contents);
     const item = scraper.item;
 
-    // リストに追加するボタンを挿入
+    // ブックマークに追加するボタンを挿入
     this.addButton(item);
 
-    // リストに追加するボタンを挿入(関連商品)
+    // ブックマークに追加するボタンを挿入(関連商品)
     this.addButtonsRelated();
 
     // 大きい商品画像を表示
-    this.enlargeImages();
+    if(this.config.larger_width){
+      this.enlargeImages();
+    }
 
     // 拡大鏡を適用
-    this.applyLoupe();
+    if(!this.config.larger_width){
+      this.applyLoupe();
+    }
 
     // 在庫情報を追加
-    this.showWarehouseInfo(item.id);
+    if(this.config.show_warehouse_info){
+      this.showWarehouseInfo(item.id);
+    }
   }
   addButton(item){
     // 追加ボタンを描画

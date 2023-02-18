@@ -1,14 +1,12 @@
-# akizuki-permanent-list
-秋月電子のサイトに買い物リストを表示するchrome拡張
-買い物リストは端末に自動的に保存される。
+# akizuki-daisuki
+秋月電子のサイトのUIを改善するchrome拡張
 
 # Features
-- 秋月電子の全てのページに買い物リストを表示
-- 商品ページに「リストに追加」ボタンが出現
-- 商品一覧、検索結果ページに「リストに追加」ボタンが出現
-
-## Pre-requisite
-- [NodeJs](https://nodejs.org/) `v17.4.0`
+- 各ページに「ブックマーク」ボタンが出現
+- ブックマークページのUIを改善
+- 商品ページの写真を大きく
+- 商品ページの商品名の全角英数を半角に
+- セッションが切れたら自動リロード
 
 ## Project setup
 - Install dependencies

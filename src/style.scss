@@ -1,4 +1,4 @@
-body{
+body.larger_width{
   /* 980 */
   #wrapper,
   #maincontents,
@@ -73,25 +73,25 @@ body{
   #maincontents2{
     float:none;
   }
-}
 
-/* 商品詳細ページ */
-.cart_table{
-  td[width*="360"] {
-    width: 480px;
-    padding-right: 20px;
+  /* 商品詳細ページ */
+  .cart_table{
+    td[width*="360"] {
+      width: 480px;
+      padding-right: 20px;
 
-    table, td{
-      width:auto;
+      table, td{
+        width:auto;
+      }
     }
-  }
-  #imglink img{
-    width: 480px;
-    height: auto;
-  }
-  img[width*="61"] {
-    width: 86px;
-    margin-right: 8px;
+    #imglink img{
+      width: 480px;
+      height: auto;
+    }
+    img[width*="61"] {
+      width: 86px;
+      margin-right: 8px;
+    }
   }
 }
 

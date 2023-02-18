@@ -24,11 +24,12 @@ var options = {
   mode: process.env.NODE_ENV || "development",
   entry: {
     content: path.join(__dirname, "src", "content.js"),
+    options: path.join(__dirname, "src", "options.js")
   },
   output: {
     globalObject: "this",
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].bundle.js",
+    filename: "[name].js",
   },
   module: {
     rules: [
@@ -59,9 +60,6 @@ var options = {
       .concat([".jsx", ".js", ".css"]),
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'style.css'
-    }),
     new webpack.ProgressPlugin(),
     // clean the build folder
     new CleanWebpackPlugin({
@@ -101,7 +99,15 @@ var options = {
         },
       ],
     }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "options.html"),
+      filename: "options.html",
+      chunks: ["options"],
+    }),
     new WriteFilePlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'style.css'
+    }),
   ],
 };
 
