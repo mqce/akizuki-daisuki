@@ -60,7 +60,7 @@ class ItemScraper {
 */
 class ItemScraperRelated extends ItemScraper {
   getName(){
-    return this.$content.querySelector('.syosai a')?.title;
+    return this.$content.querySelector('h6 a')?.textContent;
   }
   getId(){
     return this.$content.querySelector('input[name="goods"]')?.value;

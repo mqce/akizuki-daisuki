@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * config.htmlの設定値をStorageに読み書きする
+ */
 export class Config {
   static async load(){
     const defaults = {

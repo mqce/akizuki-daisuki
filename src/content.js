@@ -45,7 +45,7 @@ async function main(){
   // 一覧ページ
   const $mainframe = document.querySelector('.mainframe_');
   if($mainframe){
-    const pageList = new PageList($mainframe, bookmark);
+    const pageList = new PageList($mainframe, bookmark, config);
     pageList.init();
   }
 }

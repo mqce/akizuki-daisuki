@@ -2,8 +2,9 @@
 
 import axios from 'axios';
 import { BookmarkButton } from '../modules/BookmarkButton'
-import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper.js'
-import  Loupe  from '../modules/Loupe.js'
+import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper'
+import { zenToHan } from '../modules/Util'
+import  Loupe  from '../modules/Loupe'
 const sanitizer = new Sanitizer();
 
 export class PageDetail {
@@ -28,7 +29,7 @@ export class PageDetail {
       this.enlargeImages();
     }
 
-    // 拡大鏡を適用
+    // 画面を大きくしていない場合は拡大鏡を適用
     if(!this.config.larger_width){
       this.applyLoupe();
     }
@@ -37,11 +38,18 @@ export class PageDetail {
     if(this.config.show_warehouse_info){
       this.showWarehouseInfo(item.id);
     }
+
+    // やたら大きい文字の注意事項を小さい文字に
+    this.killLargeTexts();
   }
   addButton(item){
     // 追加ボタンを描画
     if(item){
       const $parent = document.querySelector('.cart_table h6');
+      // 商品名を半角に
+      if(this.config.zen_to_han){
+        $parent.textContent = zenToHan(item.name);
+      }
       this.appendAddButton($parent, item);
     }
   }
@@ -54,6 +62,10 @@ export class PageDetail {
 
       // 追加ボタンを描画
       if(item){
+        // 商品名を半角に
+        if(this.config.zen_to_han){
+          $item.querySelector('h6 a').textContent = zenToHan(item.name);
+        }
         const $parent = $item.querySelector('h6');
         this.appendAddButton($parent, item);
       }
@@ -100,5 +112,13 @@ export class PageDetail {
     }catch(e){
       console.error(e);
     }
+  }
+
+  killLargeTexts(){
+    const $elems = document.querySelectorAll('span[style="font-size:21px"]');
+    $elems.forEach($elem => {
+      $elem.style.fontSize = 'inherit';
+    })
+    
   }
 }

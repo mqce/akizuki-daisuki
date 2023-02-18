@@ -10,7 +10,6 @@ function main(){
 // storageのデータに合わせてチェックボックスをON/OFFする
 async function applyConfigData(){
   const config = await Config.load();
-  console.log(config);
   const $inputs = document.querySelectorAll('input[name="config"]');
   $inputs.forEach($input => {
     const key = $input.value;
