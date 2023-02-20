@@ -2,23 +2,10 @@
 
 import axios from 'axios';
 import Storage from './StorageLocal.js'
-import { ItemListData } from './ItemListData.js'
+import { zenToHan, formatNumber } from '../modules/Util'
 
 const sanitizer = new Sanitizer();// https://developer.mozilla.org/ja/docs/Web/API/Element/setHTML
 const storage = new Storage();
-
-// 全角to半角
-function replaceFullToHalf(str){
-  const half = str.replace(/[！-～]/g, (s)=>{
-    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-  });
-  return half.replace(/”/g, "\"")
-  .replace(/’/g, "'")
-  .replace(/‘/g, "`")
-  .replace(/￥/g, "\\")
-  .replace(/　/g, " ")
-  .replace(/〜/g, "~");
-}
 
 export class ItemListPanel {
   DEFAULT_WIDTH = 400;
@@ -45,8 +32,8 @@ export class ItemListPanel {
     </form>
   </div>
   `;
-  constructor() {
-    this.itemListData = new ItemListData();
+  constructor(bookmark) {
+    this.bookmark = bookmark;
     this.width = this.DEFAULT_WIDTH;
     this.height = this.DEFAULT_HEIGHT;
 
@@ -63,7 +50,8 @@ export class ItemListPanel {
     this.#init();
 
     // データをロード
-    this.list = await this.itemListData.load() || [];
+    this.list = this.bookmark.items || [];
+    console.log(this.list)
 
     // DOM更新
     this.#update();
@@ -75,11 +63,14 @@ export class ItemListPanel {
     return this.$elem;
   }
   async clear(){
-    this.list = await this.itemListData.clear();
+    await this.bookmark.clear();
+    this.list = this.bookmark.items || [];
     this.#update();
   }
   async add(item){
-    this.list = await this.itemListData.add(item);
+    await this.bookmark.add(item.id);
+    this.list = this.bookmark.items || [];
+    console.log(this.list);
     this.#update();
   }
   #init(){
@@ -172,9 +163,8 @@ export class ItemListPanel {
   }
   // 商品一件分のHTMLを生成
   #li(item){
-    const formatter = new Intl.NumberFormat('ja-JP');
-    const name = replaceFullToHalf(item.name);
-    const price = formatter.format(item.price);
+    const name = zenToHan(item.name);
+    const price = formatNumber(item.price);
 
     const $li = document.createElement('li');
     const html = `
@@ -190,7 +180,8 @@ export class ItemListPanel {
   
     // 削除ボタン
     $li.querySelector('.apl-item-remove').addEventListener('click', async e=>{
-      this.list = await this.itemListData.remove(item.id);
+      await this.bookmark.remove(item.id);
+      this.list = this.bookmark.items || [];
       this.#update();
     });
 
