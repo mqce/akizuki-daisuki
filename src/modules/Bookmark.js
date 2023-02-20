@@ -13,10 +13,10 @@ const sanitizer = new Sanitizer();
 const URL_BOOKMARK = '/catalog/customer/bookmark.aspx';
 
 export class Bookmark {
-  #items = [];
+  items = [];
   constructor() {
   }
-  async init(){
+  async load(){
     return await this.getItems();
   }
   // ブックマークページから商品情報を取得
@@ -24,14 +24,14 @@ export class Bookmark {
     const data = await this.#get();
 
     if(data){
-      this.#items = this.#parse(data);
+      this.items = this.#parse(data);
       return true;
     }else{
       return false;
     }
   }
   find(id){
-    return this.#items.find(item => item.id === id);
+    return this.items.find(item => item.id === id);
   }
   async add(id){
     // 存在確認
@@ -43,7 +43,7 @@ export class Bookmark {
     });
 
     if(data){
-      this.#items = this.#parse(data);// this.#itemsを更新
+      this.items = this.#parse(data);// this.itemsを更新
       return true;
     }else{
       return false;
@@ -64,7 +64,7 @@ export class Bookmark {
     });
 
     if(data){
-      this.#items = this.#parse(data);// this.#itemsを更新
+      this.items = this.#parse(data);// this.itemsを更新
       return true;
     }else{
       return false;

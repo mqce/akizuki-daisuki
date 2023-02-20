@@ -1,38 +1,40 @@
 "use strict";
 
-import './style.scss';
+import './css/style.scss';
 
 import { Bookmark } from './modules/Bookmark'
 import { ItemListPanel } from './modules/ItemListPanel'
 import { PageDetail } from './pages/PageDetail'
 import { PageList } from './pages/PageList'
+import { Header } from './modules/Header'
 import { Config } from './modules/Config'
 
 
-
-
-// セッションが切れてたらリロード
-const $notice = document.querySelector('notice_');
-if($notice && $notice.textContent.includes('セッションの有効期間')){
-  location.reload();
-}
-
-
 async function main(){
+  // セッションが切れてたらリロード
+  const $notice = document.querySelector('notice_');
+  if($notice && $notice.textContent.includes('セッションの有効期間')){
+    location.reload();
+  }
+
   const config = await Config.load();
-  console.log(config);
   if(config.larger_width){
     document.body.classList.add('larger_width');
   }
   
   const bookmark = new Bookmark();
-  await bookmark.init();
+  await bookmark.load();
 
-  // 欲しいものリストを表示
-  // pdfやポップアップなどヘッダーのないページには表示しない
+
+
+
+
+
   const $header = document.querySelector('#header');
   if($header){
-    showItemList();
+    const header = new Header(config);
+    header.replace();
+    // showItemList(bookmark);
   }
 
   // 詳細ページ
@@ -50,8 +52,8 @@ async function main(){
   }
 }
 
-async function showItemList(){
-  const itemListPanel = new ItemListPanel();
+async function showItemList(bookmark){
+  const itemListPanel = new ItemListPanel(bookmark);
   const $elem = await itemListPanel.load();
   document.body.appendChild($elem);
 }

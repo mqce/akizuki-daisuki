@@ -13,4 +13,10 @@ function zenToHan(str){
   .replace(/〜/g, "~");
 }
 
-export { zenToHan }
+function formatNumber(n){
+  const formatter = new Intl.NumberFormat('ja-JP');
+  return formatter.format(n);
+}
+
+
+export { zenToHan, formatNumber }
