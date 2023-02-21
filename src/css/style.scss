@@ -199,11 +199,19 @@
   cursor: pointer;
 
   &:active{
-    right:4px;
-    top:3px;
+    transform: translate(1px, 1px);
   }
   &.active{
     background-image:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_on.svg);
+  }
+}
+/* 関連商品のお気に入りボタン */
+.kanren{
+  .apl-save-button{
+    right:0;
+    top:0;
+    width:24px;
+    height:24px;
   }
 }
 /* 一覧ページのお気に入りボタン */
@@ -215,12 +223,6 @@
     top:0;
     width:24px;
     height:24px;
-
-    
-    &:active{
-      right:-1px;
-      top:1px;
-    }
   }
 }
 
