@@ -1,6 +1,6 @@
 {
-  "name": "akizuki-permanent-list",
-  "version": "0.1.0",
+  "name": "akizuki-daisuki",
+  "version": "0.2.0",
   "description": "Chrome Extension",
   "main": "src/content.js",
   "devDependencies": {
