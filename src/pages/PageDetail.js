@@ -115,10 +115,8 @@ export class PageDetail {
   }
 
   killLargeTexts(){
-    const $elems = document.querySelectorAll('span[style="font-size:21px"]');
-    $elems.forEach($elem => {
-      $elem.style.fontSize = 'inherit';
-    })
-    
+    const $elem = document.querySelector('span[style="font-size:21px"]');
+    $elem.innerHTML = $elem.innerHTML.replace(/<br>\n<br>/g, '<br>');
+    $elem.style.fontSize = 'inherit';
   }
 }

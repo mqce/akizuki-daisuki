@@ -7,7 +7,8 @@
     {
       "matches": ["https://akizukidenshi.com/*"],
       "js": ["content.js"],
-      "css": ["style.css"]
+      "css": ["style.css"],
+      "run_at": "document_start"
     }
   ],
   "options_page": "options.html",

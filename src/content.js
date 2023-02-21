@@ -3,12 +3,15 @@
 import './css/style.scss';
 
 import { Bookmark } from './modules/Bookmark'
-import { ItemListPanel } from './modules/ItemListPanel'
+//import { ItemListPanel } from './modules/ItemListPanel'
 import { PageDetail } from './pages/PageDetail'
 import { PageList } from './pages/PageList'
 import { Header } from './modules/Header'
 import { Config } from './modules/Config'
 
+window.addEventListener('DOMContentLoaded', (event) => {
+  main();
+});
 
 async function main(){
   // セッションが切れてたらリロード
@@ -21,14 +24,6 @@ async function main(){
   if(config.larger_width){
     document.body.classList.add('larger_width');
   }
-  
-  const bookmark = new Bookmark();
-  await bookmark.load();
-
-
-
-
-
 
   const $header = document.querySelector('#header');
   if($header){
@@ -36,6 +31,9 @@ async function main(){
     header.replace();
     // showItemList(bookmark);
   }
+
+  const bookmark = new Bookmark();
+  await bookmark.load();
 
   // 詳細ページ
   const $maincontents = document.querySelector('#maincontents');
@@ -58,6 +56,4 @@ async function showItemList(bookmark){
   document.body.appendChild($elem);
 }
 
-main();
-
-
+//main();

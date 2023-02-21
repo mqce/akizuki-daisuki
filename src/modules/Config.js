@@ -8,7 +8,8 @@ export class Config {
     const defaults = {
       larger_width : true,
       zen_to_han : true,
-      show_warehouse_info : true
+      show_warehouse_info : true,
+      slim_header : false,
     };
     const storageData = await chrome.storage.sync.get();
     Object.keys(defaults).forEach( key => {
