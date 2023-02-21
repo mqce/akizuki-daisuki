@@ -1,18 +1,15 @@
 "use strict";
 /**
- * Bookmark
- * 
- * 削除時にブックマーク固有IDが必要なため、メモリ上だけで追加・削除を処理することが不可能
- * 追加する度にbookmarkページをscrapeしてIDを取得する必要がある。
+ * Cart
  * 
  */
 
 import axios from 'axios';
-import { ItemScraperBookmark } from './ItemScraper.js'
+import { ItemScraperCart } from './ItemScraper.js'
 const sanitizer = new Sanitizer();
-const URL_BOOKMARK = '/catalog/customer/bookmark.aspx';
+const URL = '/catalog/cart/cart.aspx';
 
-class Bookmark {
+class Cart {
   items = [];
   constructor() {
   }
@@ -38,7 +35,8 @@ class Bookmark {
     if(this.find(id)) return false;
 
     // 都度リクエストを投げる
-    const data = await this.#get({
+    const data = await this.#post({
+      [id + '_qty'] : 1,
       goods : id
     });
 
@@ -55,12 +53,10 @@ class Bookmark {
     if(!item || !item.specificId) return false;
 
     // 都度リクエストを投げる
-    // 削除時はブックマークIDと削除キーのペアが必要
-    const deleteKey = 'del_' + item.specificId;
     const data = await this.#post({
-      [deleteKey] : true,
-      'bookmark' : item.specificId,
-      'update.x': '更新・削除'// 削除ボタンのnameとvalue
+      'rowcart1' : item.specificId,
+      'rowgoods1': item.id,
+      'del1' : true
     });
 
     if(data){
@@ -78,27 +74,26 @@ class Bookmark {
     let items = [];
     const $tmp = document.createElement('div');
     $tmp.setHTML(html, sanitizer);
-    const $items = $tmp.querySelectorAll('.bookmark_');
+    const $items = $tmp.querySelectorAll('.cart_table tr');
     $items.forEach($item => {
-      const scraper = new ItemScraperBookmark($item);
-      if(scraper.item){
-        items.push(scraper.item);
+      if($item.querySelector('.cart_tdcb')){
+        const scraper = new ItemScraperCart($item);
+        if(scraper.item){
+          items.push(scraper.item);
+        }
       }
     });
-    console.log('bookmark items', items);
+    console.log('cart items', items);
     return items;
   }
   async #get(params){
     let data = null;
     try{
-      const response = await axios.get(URL_BOOKMARK, {
+      const response = await axios.get(URL, {
         params : params
       });
       if(response.status == 200){
         data = response.data;
-        if(data.includes('ログインしてください')){
-          data = null;
-        }
       }
     }catch(e){
       console.error(e);
@@ -112,12 +107,9 @@ class Bookmark {
       for (let [key, value] of Object.entries(params)) {
         form.append(key, value);
       }
-      const response = await axios.post(URL_BOOKMARK, form);
+      const response = await axios.post(URL, form);
       if(response.status == 200){
         data = response.data;
-        if(data.includes('ログインしてください')){
-          data = null;
-        }
       }
     }catch(e){
       console.error(e);
@@ -127,5 +119,5 @@ class Bookmark {
 }
 
 
-const bookmark = new Bookmark();
-export default bookmark;
+const cart = new Cart();
+export default cart;

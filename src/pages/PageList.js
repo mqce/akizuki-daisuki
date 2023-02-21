@@ -1,14 +1,13 @@
 "use strict";
 
+import config from '../modules/Config'
 import { BookmarkButton } from '../modules/BookmarkButton'
 import { ItemScraperListPage } from '../modules/ItemScraper.js'
 import { zenToHan } from '../modules/Util'
 
 export class PageList {
-  constructor($contents, bookmark, config) {
+  constructor($contents) {
     this.$contents = $contents;
-    this.bookmark = bookmark;
-    this.config = config;
   }
   init(){
     const $items = document.querySelectorAll('.thumbox');
@@ -19,7 +18,7 @@ export class PageList {
   
       // 追加ボタンを描画
       if(item){
-        if(this.config.zen_to_han){
+        if(config.items.zen_to_han){
           $item.querySelector('.thumbox_pc .goods_name_').textContent = zenToHan(item.name);
         }
         $item.innerHTML = $item.innerHTML.replace(/<br>.?\(税込\)/, '(税込)');
@@ -29,7 +28,7 @@ export class PageList {
     })
   }
   appendAddButton($parent, item){
-    const button = new BookmarkButton(item, this.bookmark);
+    const button = new BookmarkButton(item);
     const $button = button.create();
     $parent.appendChild($button);
   }

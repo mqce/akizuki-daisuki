@@ -2,194 +2,13 @@
 @use "header.scss";
 
 
-
-.akizuki-permanent-list{
-  /* reset */
-  *,*::before,*::after{box-sizing:border-box; margin:0; padding:0;}
-  font-size:12px;
-
-  position:fixed;
-  left:10px;
-  top:12px;
-
-  header{
-    position:relative;
-    display:inline-block;
-    width:32px;
-    height:32px;
-
-    .apl-header-icon{
-      background:url(chrome-extension://__MSG_@@extension_id__/img/bookmarks.svg) 0 0 / 100% 100% no-repeat;
-      width:32px;
-      height:32px;
-      cursor: pointer;
-    }
-
-    .apl-header-length{
-      display: inline-block;
-      position:absolute;
-      right:0;
-      bottom:-5px;
-      padding:1px 3px;
-      background-color:#e2e609;
-      height:16px;
-      border-radius:6px;
-      font-size:10px;
-      color:#111;
-    }
-  }
-  .apl-body{
-    display:none;
-    position: absolute;
-    left: 0px;
-    top: 38px;
-    width:400px;
-    padding:12px 12px 12px 10px;
-    background:#fff;
-    background: rgba(255,255,255,0.88);
-    box-shadow: rgb(0 0 0 / 50%) 0px 2px 4px 0px;
-    border-radius: 3px;
-    z-index: 1;
-    resize: both;
-    overflow: auto;
-    
-    form{
-      width:100%;
-      height:100%;
-    }
-    /* resize handle */
-    /*
-    &::after{
-      position:absolute;
-      right:2px;
-      bottom:2px;
-      content:"";
-      display: block;
-      width:10px;
-      height:10px;
-      background-image: linear-gradient(-45deg,
-        transparent 0%, transparent 20%,
-        #999 20%, #999 30%,
-        transparent 30%, transparent 40%,
-        #999 40%, #999 50%,
-        transparent 50%, transparent
-      );
-      background-size: 100% 100%;
-    }
-    */
-  }
-  .apl-body.apl-is-active{
-    display:block;
-  }
-  .apl-list{
-    height:calc(100% - 32px);
-    overflow-y: auto;
-    margin-bottom:8px;
-    max-height: calc(100vh - 120px);
-
-    ul{
-      list-style:none;
-      padding:0;
-      box-sizing:border-box;
-    }
-    li{
-      display:flex;
-      align-items: center;
-      height: 28px;
-    }
-  }
-  .apl-empty{
-    display: none;
-  }
-
-  .apl-item-remove{
-    width:20px;
-    height:20px;
-    background:url(chrome-extension://__MSG_@@extension_id__/img/remove.svg) center center / 16px 16px no-repeat;
-    cursor: pointer;
-  }
-  .apl-item-thumb{
-    width:32px;
-    max-height:24px;
-    margin:0 6px;
-  }
-  .apl-item-name{
-    flex:1;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    color:#2C49B2;
-  }
-  .apl-item-price{
-    width:60px;
-    text-align: right;
-  }
-  .apl-item-cart{
-    display:inline-block;
-    width:20px;
-    height:20px;
-    margin-left:8px;
-    margin-right:1px;
-    background:url(chrome-extension://__MSG_@@extension_id__/img/cart.svg) 0 0 / 100% 100% no-repeat;
-    cursor:pointer;
-
-    &:active{
-      position: relative;
-      top:1px;
-      left:1px;
-    }
-
-    &.apl-done{
-      opacity:0.2;
-      pointer-events: none;
-    }
-  }
-
-  footer{
-    display: flex;
-    justify-content: space-between;
-  }
-  .apl-clear-button,
-  .apl-cart-button{
-    border:none;
-    padding: 3px 6px;
-    background: #eee;
-    color: #333;
-    font-size: 11px;
-    border-radius: 3px;
-  }
-}
-
-/* ブックマークが空の場合 */
-.apl-is-empty{
-  .apl-empty{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background:#f2f2f2;
-    padding:1em;
-  }
-  .apl-add-icon{
-    display:inline-block;
-    width:20px;
-    height:20px;
-    margin-right:2px;
-    background:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg) 0 0 / 100% 100% no-repeat;
-  }
-  .apl-list,
-  footer{
-    display:none;
-  }
-}
-
-
 /* お気に入りボタン */
 .cart_table h6,
 .kanren h6{
   position:relative;
   padding-right:32px;
 }
-.apl-save-button{
+.bookmark-button{
   position:absolute;
   right:5px;
   top:2px;
@@ -207,7 +26,7 @@
 }
 /* 関連商品のお気に入りボタン */
 .kanren{
-  .apl-save-button{
+  .bookmark-button{
     right:0;
     top:0;
     width:24px;
@@ -218,7 +37,7 @@
 .mainframe_ .thumbox{
   position:relative;
 
-  .apl-save-button{
+  .bookmark-button{
     right:0;
     top:0;
     width:24px;
@@ -235,7 +54,7 @@
   position: relative;
   cursor: zoom-in;
 }
-.apl-img-loupe{
+.img-loupe{
   display:none;
   position:absolute;
   left:0;

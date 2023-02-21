@@ -1,6 +1,8 @@
 "use strict";
 
 import axios from 'axios';
+
+import config from '../modules/Config'
 import { BookmarkButton } from '../modules/BookmarkButton'
 import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper'
 import { zenToHan } from '../modules/Util'
@@ -8,10 +10,8 @@ import  Loupe  from '../modules/Loupe'
 const sanitizer = new Sanitizer();
 
 export class PageDetail {
-  constructor($contents, bookmark, config) {
+  constructor($contents) {
     this.$contents = $contents;
-    this.bookmark = bookmark;
-    this.config = config;
   }
   init(){
     // 商品データをscrape
@@ -25,17 +25,17 @@ export class PageDetail {
     this.addButtonsRelated();
 
     // 大きい商品画像を表示
-    if(this.config.larger_width){
+    if(config.items.larger_width){
       this.enlargeImages();
     }
 
     // 画面を大きくしていない場合は拡大鏡を適用
-    if(!this.config.larger_width){
+    if(!config.items.larger_width){
       this.applyLoupe();
     }
 
     // 在庫情報を追加
-    if(this.config.show_warehouse_info){
+    if(config.items.show_warehouse_info){
       this.showWarehouseInfo(item.id);
     }
 
@@ -47,7 +47,7 @@ export class PageDetail {
     if(item){
       const $parent = document.querySelector('.cart_table h6');
       // 商品名を半角に
-      if(this.config.zen_to_han){
+      if(config.items.zen_to_han){
         $parent.textContent = zenToHan(item.name);
       }
       this.appendAddButton($parent, item);
@@ -63,7 +63,7 @@ export class PageDetail {
       // 追加ボタンを描画
       if(item){
         // 商品名を半角に
-        if(this.config.zen_to_han){
+        if(config.items.zen_to_han){
           $item.querySelector('h6 a').textContent = zenToHan(item.name);
         }
         const $parent = $item.querySelector('h6');
@@ -73,7 +73,7 @@ export class PageDetail {
   }
 
   appendAddButton($parent, item){
-    const button = new BookmarkButton(item, this.bookmark);
+    const button = new BookmarkButton(item);
     const $button = button.create();
     $parent.appendChild($button);
   }

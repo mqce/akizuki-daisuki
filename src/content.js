@@ -2,12 +2,12 @@
 
 import './css/style.scss';
 
-import { Bookmark } from './modules/Bookmark'
-//import { ItemListPanel } from './modules/ItemListPanel'
+import config from './modules/Config'
+import bookmark from './modules/Bookmark'
+import cart from './modules/Cart'
 import { PageDetail } from './pages/PageDetail'
 import { PageList } from './pages/PageList'
 import { Header } from './modules/Header'
-import { Config } from './modules/Config'
 
 window.addEventListener('DOMContentLoaded', (event) => {
   main();
@@ -20,40 +20,32 @@ async function main(){
     location.reload();
   }
 
-  const config = await Config.load();
-  if(config.larger_width){
+  await config.load();
+  if(config.items.larger_width){
     document.body.classList.add('larger_width');
   }
 
+  // ヘッダーの差し替えはなるはやで
   const $header = document.querySelector('#header');
   if($header){
-    const header = new Header(config);
+    const header = new Header();
     header.replace();
-    // showItemList(bookmark);
   }
 
-  const bookmark = new Bookmark();
   await bookmark.load();
+  await cart.load();
 
   // 詳細ページ
   const $maincontents = document.querySelector('#maincontents');
   if($maincontents){
-    const pageDetail = new PageDetail($maincontents, bookmark, config);
+    const pageDetail = new PageDetail($maincontents);
     pageDetail.init();
   }
 
   // 一覧ページ
   const $mainframe = document.querySelector('.mainframe_');
   if($mainframe){
-    const pageList = new PageList($mainframe, bookmark, config);
+    const pageList = new PageList($mainframe);
     pageList.init();
   }
 }
-
-async function showItemList(bookmark){
-  const itemListPanel = new ItemListPanel(bookmark);
-  const $elem = await itemListPanel.load();
-  document.body.appendChild($elem);
-}
-
-//main();

@@ -1,11 +1,10 @@
 "use strict";
 
+import config from '../modules/Config'
 const sanitizer = new Sanitizer();
 
 export class Header {
-  constructor(config) {
-    this.config = config;
-
+  constructor() {
     const isLoggedIn = /ログアウト/.test(document.querySelector('#header').innerHTML);
     const loginHtml = isLoggedIn ? 
       `<a href="/catalog/customer/logout.aspx">ログアウト</a>` :
@@ -92,7 +91,7 @@ export class Header {
   replace(){
     const $header = document.querySelector('#header');
     const $newHeader = document.createElement('header');
-    if(this.config.slim_header){
+    if(config.items.slim_header){
       $newHeader.classList.add('header-slim');
       $newHeader.setHTML(this.slim, sanitizer);
     }else{

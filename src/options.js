@@ -1,6 +1,6 @@
 "use strict";
 
-import { Config } from './modules/Config'
+import config from './modules/Config'
 
 function main(){
   applyConfigData();
@@ -9,11 +9,11 @@ function main(){
 
 // storageのデータに合わせてチェックボックスをON/OFFする
 async function applyConfigData(){
-  const config = await Config.load();
+  await config.load();
   const $inputs = document.querySelectorAll('input[name="config"]');
   $inputs.forEach($input => {
     const key = $input.value;
-    if(config[key]){
+    if(config.items[key]){
       $input.checked = true;
     }else{
       $input.checked = false;
@@ -28,7 +28,7 @@ function attachEvents(){
     $input.addEventListener('change', (event) => {
       const key = $input.value;
       const value = $input.checked;
-      Config.set(key, value);
+      config.set(key, value);
     });
   });
 }

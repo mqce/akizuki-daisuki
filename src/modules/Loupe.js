@@ -12,7 +12,7 @@ export default class Loupe {
   }
   create($container){
     const $elem = document.createElement('div');
-    $elem.classList.add('apl-img-loupe');
+    $elem.classList.add('img-loupe');
     $container.appendChild($elem);
     return $elem;
   }

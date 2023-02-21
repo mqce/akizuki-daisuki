@@ -16,6 +16,7 @@ class ItemScraper {
         url : this.getUrl(),
         price : this.getPrice(),
         image : this.getImage(),
+        specificId : this.getSpecificId(),// お気に入りページの削除キー、買い物かごの削除キー
       };
     }catch(e){
 
@@ -52,6 +53,9 @@ class ItemScraper {
     // メイン画像のurlからサムネ画像のurlに変換
     const url = this.$content.querySelector('#imglink')?.href;
     return url.replace(/\/goods\/\w\//, '/goods/S/');
+  }
+  getSpecificId(){
+    return '';
   }
 }
 
@@ -110,22 +114,6 @@ class ItemScraperListPage extends ItemScraper {
   お気に入りページ
 */
 class ItemScraperBookmark extends ItemScraper {
-  get item(){
-    let item = null;
-    try{
-      item = {
-        name : this.getName(),
-        id : this.getId(),
-        url : this.getUrl(),
-        price : this.getPrice(),
-        image : this.getImage(),
-        bookmarkId : this.getBookmarkId(),// special
-      };
-    }catch(e){
-
-    }
-    return item;
-  }
   getName(){
     return this.$content.querySelector('.goods_name_')?.textContent;
   }
@@ -142,9 +130,35 @@ class ItemScraperBookmark extends ItemScraper {
   getImage(){
     return this.$content.querySelector('img')?.src;
   }
-  getBookmarkId(){
+  getSpecificId(){
     return this.$content.nextElementSibling.querySelector('input[name="bookmark"]')?.value;
   }
 }
 
-export {ItemScraper, ItemScraperRelated, ItemScraperListPage, ItemScraperBookmark}
+/*
+  買い物かごページ
+*/
+class ItemScraperCart extends ItemScraper {
+  getName(){
+    return this.$content.querySelector('a:first-of-type')?.title;
+  }
+  getId(){
+    return this.$content.querySelector('a:first-of-type')?.textContent;
+  }
+  getUrl(){
+    return this.$content.querySelector('a:first-of-type')?.href;
+  }
+  getPrice(){
+    const elems = this.$content.querySelectorAll(".cart_tdcb span");
+    return this.searchPriceFromElements(elems);
+  }
+  getImage(){
+    return this.$content.querySelector('.cart_tdl a>img')?.src;
+  }
+  getSpecificId(){
+    return this.$content.querySelector('input[name="rowcart1"]')?.value;
+  }
+
+}
+
+export {ItemScraper, ItemScraperRelated, ItemScraperListPage, ItemScraperBookmark, ItemScraperCart}

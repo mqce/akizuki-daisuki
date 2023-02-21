@@ -3,10 +3,11 @@
  * BookmarkButton
  * 商品ページ、一覧ページに表示するブックマーク追加・削除ボタン
  */
+import bookmark from './Bookmark'
+
 export class BookmarkButton {
-  constructor(item, bookmark) {
+  constructor(item) {
     this.item = item;
-    this.bookmark = bookmark;
     this.isBookmarked = false;
   }
   create(){
@@ -17,9 +18,9 @@ export class BookmarkButton {
   // ブックマークボタンのDOM
   #createElem(){
     const $elem = document.createElement('div');
-    $elem.classList.add('apl-save-button');
+    $elem.classList.add('bookmark-button');
 
-    if(this.bookmark.find(this.item.id)){
+    if(bookmark.find(this.item.id)){
       $elem.classList.add('active');
       this.isBookmarked = true;
     }else{
@@ -35,14 +36,14 @@ export class BookmarkButton {
       if(isBusy) return;// 連打対策
       isBusy = true;
       if(this.isBookmarked){
-        if(await this.bookmark.remove(this.item.id)){
+        if(await bookmark.remove(this.item.id)){
           $elem.classList.remove('active');
           this.isBookmarked = false;
         }else{
           this.#requireLogin();
         }
       }else{
-        if(await this.bookmark.add(this.item.id)){
+        if(await bookmark.add(this.item.id)){
           $elem.classList.add('active');
           this.isBookmarked = true;
         }else{
