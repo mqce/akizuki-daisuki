@@ -15,8 +15,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 async function main(){
   // セッションが切れてたらリロード
-  const $notice = document.querySelector('notice_');
-  if($notice && $notice.textContent.includes('セッションの有効期間')){
+  const $notice = document.querySelector('.notice_');
+  if($notice && $notice.innerHTML.includes('セッションの有効期間')){
     location.reload();
   }
 
@@ -30,6 +30,8 @@ async function main(){
   if($header){
     const header = new Header();
     header.replace();
+    header.updateBookmarkCount(5);
+    header.updateCartCount(2);
   }
 
   await bookmark.load();
