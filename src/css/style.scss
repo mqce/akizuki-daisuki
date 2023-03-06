@@ -14,7 +14,7 @@
   top:2px;
   display: flex;
   justify-content: flex-end;
-  width:72px;
+  gap:8px;
 }
 .cart-button,
 .bookmark-button{
@@ -30,7 +30,6 @@
   }
 }
 .bookmark-button{
-  margin-right: 8px;
   background-image: url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg);
   &.active{
     background-image: url(chrome-extension://__MSG_@@extension_id__/img/bookmark_on.svg);
@@ -41,6 +40,7 @@
   .action-buttons{
     right:0;
     top:0;
+    gap:8px;
   }
   .cart-button,
   .bookmark-button{
@@ -52,11 +52,15 @@
 .mainframe_ .thumbox{
   position:relative;
 
-  .bookmark-button{
+  .action-buttons{
     right:0;
     top:0;
-    width:24px;
-    height:24px;
+    gap:4px;
+  }
+  .cart-button,
+  .bookmark-button{
+    width:20px;
+    height:20px;
   }
 }
 
