@@ -39,8 +39,6 @@ export class CartButton {
         if(await cart.remove(this.item.id)){
           $elem.classList.remove('active');
           this.exists = false;
-        }else{
-          this.#requireLogin();
         }
       }else{
         if(await cart.add(this.item.id)){

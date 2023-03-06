@@ -6,29 +6,44 @@
 .cart_table h6,
 .kanren h6{
   position:relative;
-  padding-right:32px;
+  padding-right:72px;
 }
-.bookmark-button{
+.action-buttons {
   position:absolute;
   right:5px;
   top:2px;
+  display: flex;
+  justify-content: flex-end;
+  width:72px;
+}
+.cart-button,
+.bookmark-button{
   width:32px;
   height:32px;
-  background:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg) 0 0 / 100% 100% no-repeat;
   cursor: pointer;
-
   &:active{
     transform: translate(1px, 1px);
   }
+  background:url(chrome-extension://__MSG_@@extension_id__/img/cart_off.svg) 0 0 / 100% 100% no-repeat;
   &.active{
-    background-image:url(chrome-extension://__MSG_@@extension_id__/img/bookmark_on.svg);
+    background-image: url(chrome-extension://__MSG_@@extension_id__/img/cart_on.svg);
+  }
+}
+.bookmark-button{
+  margin-right: 8px;
+  background-image: url(chrome-extension://__MSG_@@extension_id__/img/bookmark_off.svg);
+  &.active{
+    background-image: url(chrome-extension://__MSG_@@extension_id__/img/bookmark_on.svg);
   }
 }
 /* 関連商品のお気に入りボタン */
 .kanren{
-  .bookmark-button{
+  .action-buttons{
     right:0;
     top:0;
+  }
+  .cart-button,
+  .bookmark-button{
     width:24px;
     height:24px;
   }

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import config from '../modules/Config'
 import { BookmarkButton } from '../modules/BookmarkButton'
+import { CartButton } from '../modules/CartButton'
 import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper'
 import { zenToHan } from '../modules/Util'
 import  Loupe  from '../modules/Loupe'
@@ -42,17 +43,18 @@ export class PageDetail {
     // やたら大きい文字の注意事項を小さい文字に
     this.killLargeTexts();
   }
+  // 商品名の横にボタンを追加
   addButton(item){
-    // 追加ボタンを描画
     if(item){
       const $parent = document.querySelector('.cart_table h6');
       // 商品名を半角に
       if(config.items.zen_to_han){
         $parent.textContent = zenToHan(item.name);
       }
-      this.appendAddButton($parent, item);
+      this.appendBookmarkAndCartButtons($parent, item);
     }
   }
+  // 関連商品にボタンを追加
   addButtonsRelated(){
     const $items = document.querySelectorAll('.kanren form>table');
     $items.forEach($item => {
@@ -67,13 +69,27 @@ export class PageDetail {
           $item.querySelector('h6 a').textContent = zenToHan(item.name);
         }
         const $parent = $item.querySelector('h6');
-        this.appendAddButton($parent, item);
+        this.appendBookmarkAndCartButtons($parent, item);
       }
     })
   }
 
-  appendAddButton($parent, item){
+  appendBookmarkAndCartButtons($parent, item){
+    const $elem = document.createElement('div');
+    $elem.classList.add('action-buttons');
+    $parent.appendChild($elem);
+    this.appendBookmarkButton($elem, item);
+    this.appendCartButton($elem, item);
+  }
+
+  appendBookmarkButton($parent, item){
     const button = new BookmarkButton(item);
+    const $button = button.create();
+    $parent.appendChild($button);
+  }
+
+  appendCartButton($parent, item){
+    const button = new CartButton(item);
     const $button = button.create();
     $parent.appendChild($button);
   }
