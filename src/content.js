@@ -1,13 +1,14 @@
 "use strict";
 
-import './css/style.scss';
+import '@/css/style.scss';
 
-import config from './modules/Config'
-import bookmark from './modules/Bookmark'
-import cart from './modules/Cart'
-import { PageDetail } from './pages/PageDetail'
-import { PageList } from './pages/PageList'
-import { Header } from './modules/Header'
+import config from '@/modules/Config'
+import bookmark from '@/modules/Bookmark'
+import cart from '@/modules/Cart'
+import { Header } from '@/modules/Header'
+import { PageDetail } from '@/pages/PageDetail'
+import { PageList } from '@/pages/PageList'
+
 
 window.addEventListener('DOMContentLoaded', (event) => {
   main();

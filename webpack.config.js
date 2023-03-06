@@ -55,6 +55,9 @@ var options = {
     ],
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    },
     extensions: fileExtensions
       .map((extension) => "." + extension)
       .concat([".jsx", ".js", ".css"]),

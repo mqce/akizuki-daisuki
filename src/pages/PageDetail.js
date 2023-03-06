@@ -2,12 +2,12 @@
 
 import axios from 'axios';
 
-import config from '../modules/Config'
-import { BookmarkButton } from '../modules/BookmarkButton'
-import { CartButton } from '../modules/CartButton'
-import { ItemScraper, ItemScraperRelated } from '../modules/ItemScraper'
-import { zenToHan } from '../modules/Util'
-import  Loupe  from '../modules/Loupe'
+import config from '@/modules/Config'
+import { BookmarkButton } from '@/modules/BookmarkButton'
+import { CartButton } from '@/modules/CartButton'
+import { ItemScraper, ItemScraperRelated } from '@/modules/ItemScraper'
+import { zenToHan } from '@/modules/Util'
+import  Loupe  from '@/modules/Loupe'
 const sanitizer = new Sanitizer();
 
 export class PageDetail {

@@ -1,10 +1,10 @@
 "use strict";
 
-import config from '../modules/Config'
-import { CartButton } from '../modules/CartButton'
-import { BookmarkButton } from '../modules/BookmarkButton'
-import { ItemScraperListPage } from '../modules/ItemScraper.js'
-import { zenToHan } from '../modules/Util'
+import config from '@/modules/Config'
+import { CartButton } from '@/modules/CartButton'
+import { BookmarkButton } from '@/modules/BookmarkButton'
+import { ItemScraperListPage } from '@/modules/ItemScraper.js'
+import { zenToHan } from '@/modules/Util'
 
 export class PageList {
   constructor($contents) {
