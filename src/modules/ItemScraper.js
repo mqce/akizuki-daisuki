@@ -156,7 +156,7 @@ class ItemScraperCart extends ItemScraper {
     return this.$content.querySelector('.cart_tdl a>img')?.src;
   }
   getSpecificId(){
-    return this.$content.querySelector('input[name="rowcart1"]')?.value;
+    return this.$content.querySelector('input[name*="rowcart"]')?.value;
   }
 
 }

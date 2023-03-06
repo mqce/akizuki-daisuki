@@ -27,6 +27,9 @@ class Cart {
       return false;
     }
   }
+  get length(){
+    return this.items.length;
+  }
   find(id){
     return this.items.find(item => item.id === id);
   }
@@ -54,9 +57,11 @@ class Cart {
 
     // 都度リクエストを投げる
     const data = await this.#post({
-      'rowcart1' : item.specificId,
-      'rowgoods1': item.id,
-      'del1' : true
+      ['rowcart'+item.row] : item.specificId,
+      ['rowgoods'+item.row] : item.id,
+      ['del'+item.row+'.x'] : 1,
+      ['del'+item.row+'.y'] : 1,
+      'refresh': true,
     });
 
     if(data){
@@ -72,19 +77,32 @@ class Cart {
   // HTMLをparseして商品情報を取得
   #parse(html){
     let items = [];
-    const $tmp = document.createElement('div');
-    $tmp.setHTML(html, sanitizer);
-    const $items = $tmp.querySelectorAll('.cart_table tr');
+    let i = 0;
+    const $items = this.#getItemsDomFromHTML(html);
     $items.forEach($item => {
       if($item.querySelector('.cart_tdcb')){
         const scraper = new ItemScraperCart($item);
         if(scraper.item){
-          items.push(scraper.item);
+          const item = scraper.item;
+          item.row = ++i;
+          items.push(item);
         }
       }
     });
     console.log('cart items', items);
     return items;
+  }
+  #getItemsDomFromHTML(html){
+    const $tmp = document.createElement('div');
+    $tmp.setHTML(html, sanitizer);
+
+    /*
+    // POST用パラメータ
+    this.t2 = $tmp.querySelector('input[name="t2"]')?.value;
+    this.t3 = $tmp.querySelector('input[name="t3"]')?.value;
+    */
+    const $items = $tmp.querySelectorAll('.cart_table tr');
+    return $items;
   }
   async #get(params){
     let data = null;

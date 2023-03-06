@@ -3,14 +3,46 @@
 import config from '../modules/Config'
 const sanitizer = new Sanitizer();
 
-export class Header {
+class Header {
   constructor() {
-    const isLoggedIn = /ログアウト/.test(document.querySelector('#header').innerHTML);
-    const loginHtml = isLoggedIn ? 
-      `<a href="/catalog/customer/logout.aspx">ログアウト</a>` :
-      `<a href="/catalog/customer/menu.aspx">ログイン</a>`;
+  }
+  init(){
+    this.isLoggedIn = /ログアウト/.test(document.querySelector('#header').innerHTML);
 
-    this.html = `
+    const $header = document.querySelector('#header');
+    const $newHeader = document.createElement('header');
+    if(config.items.slim_header){
+      $newHeader.classList.add('header-slim');
+      $newHeader.setHTML(this.slimHtml, sanitizer);
+    }else{
+      $newHeader.classList.add('header');
+      $newHeader.setHTML(this.html, sanitizer);
+    }
+    $header.replaceWith($newHeader);
+    this.$elem = $newHeader;
+  }
+  updateBookmarkCount(n){
+    this.#updateCount('.header-bookmark-button', n);
+  }
+  updateCartCount(n){
+    this.#updateCount('.header-cart-button', n);
+  }
+  #updateCount(selector, n){
+    const $button = this.$elem.querySelector(selector);
+    let $count = $button.querySelector('.header-count');
+    if(n){
+      $count.textContent = parseInt(n);
+    }else{
+      $count.textContent = '';
+    }
+  }
+  get loginHtml(){
+    return this.isLoggedIn ? 
+    `<a href="/catalog/customer/logout.aspx">ログアウト</a>` :
+    `<a href="/catalog/customer/menu.aspx">ログイン</a>`;
+  }
+  get html(){
+    return `
     <div>
       <div class="header-main">
         <div class="logo"><a href="/catalog/top.aspx"><img src="/img/usr/logo4.gif" alt="秋月電子通商" width="300" height="64"></a></div>
@@ -18,8 +50,14 @@ export class Header {
           <a href="/catalog/customer/menu.aspx" title="マイページ"><img src="/img/usr/bt_top03.gif" alt="マイページ"></a>
           <a href="/catalog/contents2/faxbuy.aspx#form" title="注文書"><img src="/img/usr/bt_top01.gif" alt="注文書"></a>
           <a href="/catalog/contents2/contact.aspx" title="お問い合わせ"><img src="/img/usr/bt_top02.gif" alt="お問い合わせ"></a>
-          <a href="/catalog/customer/bookmark.aspx" title="お気に入り"><img src="${chrome.runtime.getURL('img/bookmark.png')}" alt="お気に入り"></a>
-          <a href="/catalog/cart/cart.aspx" title="かごの中身"><img src="/img/usr/bt_top04.gif" alt="かごの中身"></a>
+          <a class="header-bookmark-button" href="/catalog/customer/bookmark.aspx" title="お気に入り">
+            <img src="${chrome.runtime.getURL('img/bookmark.png')}" alt="お気に入り">
+            <span class="header-count"></span>
+          </a>
+          <a class="header-cart-button" href="/catalog/cart/cart.aspx" title="かごの中身">
+            <img src="/img/usr/bt_top04.gif" alt="かごの中身">
+            <span class="header-count"></span>
+          </a>
           <a href="/catalog/contents2/koukoku.aspx" title="広告"><img src="https://akizukidenshi.com/img/usr/bt_top05.gif" alt="広告"></a>
           <a href="/catalog/contents2/kairo.aspx" title="回路図集"><img src="https://akizukidenshi.com/img/usr/bt_top06.gif" alt="回路図集"></a>
         </nav>
@@ -36,7 +74,7 @@ export class Header {
           <a href="/catalog/contents2/faq3.aspx">よくある質問</a>
           <a href="/catalog/contents2/down.aspx">ダウンロード</a>
           <a href="/catalog/contact/order.aspx">配送状況確認</a>
-          ${loginHtml}
+          ${this.loginHtml}
         </nav>
         <form action="/catalog/goods/search.aspx" method="get" name="frmSearch">
           <input type="hidden" name="search" value="x">
@@ -46,8 +84,9 @@ export class Header {
       </div>
     </div>
     `;
-
-    this.slim = `
+  }
+  get slimHtml(){
+    return `
     <div>
       <div class="header-main">
         <a class="logo" href="/catalog/top.aspx">秋月電子通商</a>
@@ -58,13 +97,19 @@ export class Header {
             <input type="submit" value="検索">
           </form>
           <nav>
-            ${loginHtml}
+            ${this.loginHtml}
             <a href="/catalog/customer/menu.aspx" title="マイページ">マイページ</a>
             <a href="/catalog/contents2/contact.aspx" title="お問い合わせ">お問い合わせ</a>
           </nav>
           <div class="header-buttons">
-            <a href="/catalog/customer/bookmark.aspx" title="お気に入り"><img src="${chrome.runtime.getURL('img/bookmarks.svg')}" alt="お気に入り"></a>
-            <a href="/catalog/cart/cart.aspx" title="かごの中身"><img src="${chrome.runtime.getURL('img/cart.svg')}" alt="かごの中身"></a>
+            <a class="header-bookmark-button" href="/catalog/customer/bookmark.aspx" title="お気に入り">
+              <img src="${chrome.runtime.getURL('img/bookmarks.svg')}" alt="お気に入り">
+              <span class="header-count"></span>
+            </a>
+            <a class="header-cart-button" href="/catalog/cart/cart.aspx" title="かごの中身">
+              <img src="${chrome.runtime.getURL('img/cart.svg')}" alt="かごの中身">
+              <span class="header-count"></span>
+            </a>
           </div>
         </div>
 
@@ -88,17 +133,7 @@ export class Header {
     </div>
     `
   }
-  replace(){
-    const $header = document.querySelector('#header');
-    const $newHeader = document.createElement('header');
-    if(config.items.slim_header){
-      $newHeader.classList.add('header-slim');
-      $newHeader.setHTML(this.slim, sanitizer);
-    }else{
-      $newHeader.classList.add('header');
-      $newHeader.setHTML(this.html, sanitizer);
-    }
-
-    $header.replaceWith($newHeader);
-  }
 }
+
+const header = new Header();
+export default header;

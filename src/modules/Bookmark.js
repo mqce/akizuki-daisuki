@@ -30,6 +30,9 @@ class Bookmark {
       return false;
     }
   }
+  get length(){
+    return this.items.length;
+  }
   find(id){
     return this.items.find(item => item.id === id);
   }

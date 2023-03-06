@@ -5,7 +5,8 @@ import '@/css/style.scss';
 import config from '@/modules/Config'
 import bookmark from '@/modules/Bookmark'
 import cart from '@/modules/Cart'
-import { Header } from '@/modules/Header'
+import header from '@/modules/Header'
+
 import { PageDetail } from '@/pages/PageDetail'
 import { PageList } from '@/pages/PageList'
 
@@ -29,14 +30,14 @@ async function main(){
   // ヘッダーの差し替えはなるはやで
   const $header = document.querySelector('#header');
   if($header){
-    const header = new Header();
-    header.replace();
-    header.updateBookmarkCount(5);
-    header.updateCartCount(2);
+    header.init();
   }
 
   await bookmark.load();
+  header.updateBookmarkCount(bookmark.length);
+
   await cart.load();
+  header.updateCartCount(cart.length);
 
   // 詳細ページ
   const $maincontents = document.querySelector('#maincontents');

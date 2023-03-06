@@ -3,7 +3,8 @@
  * CartButton
  * 商品ページ、一覧ページに表示する、カートに追加・削除ボタン
  */
-import cart from './Cart'
+import cart from '@/modules/Cart'
+import header from '@/modules/Header'
 
 export class CartButton {
   constructor(item) {
@@ -37,11 +38,13 @@ export class CartButton {
       isBusy = true;
       if(this.exists){
         if(await cart.remove(this.item.id)){
+          header.updateCartCount(cart.length);
           $elem.classList.remove('active');
           this.exists = false;
         }
       }else{
         if(await cart.add(this.item.id)){
+          header.updateCartCount(cart.length);
           $elem.classList.add('active');
           this.exists = true;
         }

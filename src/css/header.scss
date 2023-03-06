@@ -109,8 +109,11 @@
         display:flex;
         gap:12px;
 
-        img{
-          height:20px;
+        .header-cart-button img{
+          height:32px;
+        }
+        .header-bookmark-button img{
+          height:29px;
         }
       }
     }
@@ -124,5 +127,25 @@
       margin-right:7px;
     }
 
+  }
+}
+
+.header-cart-button,
+.header-bookmark-button{
+  position: relative;
+
+  .header-count:not(:empty){
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background:#ff6;
+    color:#333;
+    width:16px;
+    height:16px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
   }
 }
