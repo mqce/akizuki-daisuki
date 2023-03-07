@@ -5,7 +5,7 @@ import axios from 'axios';
 import config from '@/modules/Config'
 import { BookmarkButton } from '@/modules/BookmarkButton'
 import { CartButton } from '@/modules/CartButton'
-import { ItemScraper, ItemScraperRelated } from '@/modules/ItemScraper'
+import { itemScraper, itemScraperRelated } from '@/modules/ItemScraper'
 import { zenToHan } from '@/modules/Util'
 import  Loupe  from '@/modules/Loupe'
 const sanitizer = new Sanitizer();
@@ -16,8 +16,7 @@ export class PageDetail {
   }
   init(){
     // 商品データをscrape
-    const scraper = new ItemScraper(this.$contents);
-    const item = scraper.item;
+    const item = itemScraper(this.$contents);
 
     // ブックマークに追加するボタンを挿入
     this.addButton(item);
@@ -59,8 +58,7 @@ export class PageDetail {
     const $items = document.querySelectorAll('.kanren form>table');
     $items.forEach($item => {
       // 商品データをscrape
-      const scraper = new ItemScraperRelated($item);
-      const item = scraper.item;
+      const item = itemScraperRelated($item);
 
       // 追加ボタンを描画
       if(item){

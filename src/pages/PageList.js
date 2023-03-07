@@ -3,7 +3,7 @@
 import config from '@/modules/Config'
 import { CartButton } from '@/modules/CartButton'
 import { BookmarkButton } from '@/modules/BookmarkButton'
-import { ItemScraperListPage } from '@/modules/ItemScraper.js'
+import { itemScraperListPage } from '@/modules/ItemScraper.js'
 import { zenToHan } from '@/modules/Util'
 
 export class PageList {
@@ -14,8 +14,7 @@ export class PageList {
     const $items = document.querySelectorAll('.thumbox');
     $items.forEach($item => {
       // 商品データをscrape
-      const scraper = new ItemScraperListPage($item);
-      const item = scraper.item;
+      const item = itemScraperListPage($item);
   
       // 追加ボタンを描画
       if(item){

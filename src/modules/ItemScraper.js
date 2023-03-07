@@ -58,6 +58,10 @@ class ItemScraper {
     return '';
   }
 }
+export function itemScraper($content){
+  const scraper = new ItemScraper($content);
+  return scraper.exec();
+}
 
 /*
   商品ページ下部の「関連商品」や「この商品を購入した方は～」に出てくる商品
@@ -79,6 +83,10 @@ class ItemScraperRelated extends ItemScraper {
   getImage(){
     return this.$content.querySelector('.syosai img')?.src;
   }
+}
+export function itemScraperRelated($content){
+  const scraper = new ItemScraperRelated($content);
+  return scraper.exec();
 }
 
 /*
@@ -109,6 +117,10 @@ class ItemScraperListPage extends ItemScraper {
     return this.$content.querySelector('.thumbox_img img')?.src;
   }
 }
+export function itemScraperListPage($content){
+  const scraper = new ItemScraperListPage($content);
+  return scraper.exec();
+}
 
 /*
   お気に入りページ
@@ -134,11 +146,20 @@ class ItemScraperBookmark extends ItemScraper {
     return this.$content.nextElementSibling.querySelector('input[name="bookmark"]')?.value;
   }
 }
+export function itemScraperBookmark($content){
+  const scraper = new ItemScraperBookmark($content);
+  return scraper.exec();
+}
 
 /*
   買い物かごページ
 */
 class ItemScraperCart extends ItemScraper {
+  exec(){
+    const item = super.exec();
+    item.quantitity = this.getQuantity();
+    return item;
+  }
   getName(){
     return this.$content.querySelector('a:first-of-type')?.title;
   }
@@ -158,7 +179,12 @@ class ItemScraperCart extends ItemScraper {
   getSpecificId(){
     return this.$content.querySelector('input[name*="rowcart"]')?.value;
   }
-
+  getQuantity(){
+    return this.$content.querySelector('input[name*="qty"]')?.value;
+  }
+}
+export function itemScraperCart($content){
+  const scraper = new ItemScraperCart($content);
+  return scraper.exec();
 }
 
-export {ItemScraper, ItemScraperRelated, ItemScraperListPage, ItemScraperBookmark, ItemScraperCart}

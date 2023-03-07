@@ -8,7 +8,7 @@
  */
 
 import axios from 'axios';
-import { ItemScraperBookmark } from './ItemScraper.js'
+import { itemScraperBookmark } from './ItemScraper.js'
 const sanitizer = new Sanitizer();
 const URL_BOOKMARK = '/catalog/customer/bookmark.aspx';
 
@@ -83,9 +83,9 @@ class Bookmark {
     $tmp.setHTML(html, sanitizer);
     const $items = $tmp.querySelectorAll('.bookmark_');
     $items.forEach($item => {
-      const scraper = new ItemScraperBookmark($item);
-      if(scraper.item){
-        items.push(scraper.item);
+      const item = itemScraperBookmark($item);
+      if(item){
+        items.push(item);
       }
     });
     console.log('bookmark items', items);

@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios';
-import { ItemScraperCart } from './ItemScraper.js'
+import { itemScraperCart} from './ItemScraper.js'
 const sanitizer = new Sanitizer();
 const URL = '/catalog/cart/cart.aspx';
 
@@ -55,14 +55,19 @@ class Cart {
     const item = this.find(id);
     if(!item || !item.specificId) return false;
 
-    // 都度リクエストを投げる
-    const data = await this.#post({
-      ['rowcart'+item.row] : item.specificId,
-      ['rowgoods'+item.row] : item.id,
-      ['del'+item.row+'.x'] : 1,
-      ['del'+item.row+'.y'] : 1,
-      'refresh': true,
+    // 削除時は他の商品データも全部POSTする必要あり
+    let params = {};
+    this.items.forEach(x =>{
+      params['rowcart'+x.row] = x.specificId;
+      params['rowgoods'+x.row] = x.id;
+      params['qty'+x.row] = x.quantity;
     });
+    // 削除する商品だけdel
+    params['del'+item.row+'.x'] = 1;
+    params['del'+item.row+'.y'] = 1;
+    params['refresh'] = true;
+
+    const data = await this.#post(params);
 
     if(data){
       this.items = this.#parse(data);// this.itemsを更新
@@ -81,9 +86,8 @@ class Cart {
     const $items = this.#getItemsDomFromHTML(html);
     $items.forEach($item => {
       if($item.querySelector('.cart_tdcb')){
-        const scraper = new ItemScraperCart($item);
-        if(scraper.item){
-          const item = scraper.item;
+        const item = itemScraperCart($item);
+        if(item){
           item.row = ++i;
           items.push(item);
         }
@@ -95,7 +99,6 @@ class Cart {
   #getItemsDomFromHTML(html){
     const $tmp = document.createElement('div');
     $tmp.setHTML(html, sanitizer);
-
     /*
     // POST用パラメータ
     this.t2 = $tmp.querySelector('input[name="t2"]')?.value;
@@ -121,11 +124,15 @@ class Cart {
   async #post(params){
     let data = null;
     try{
-      const form = new FormData();
+      const form = new URLSearchParams();
       for (let [key, value] of Object.entries(params)) {
         form.append(key, value);
       }
-      const response = await axios.post(URL, form);
+      const response = await axios.post(URL, form, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
       if(response.status == 200){
         data = response.data;
       }

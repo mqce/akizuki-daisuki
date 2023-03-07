@@ -5,6 +5,10 @@ const sanitizer = new Sanitizer();
 
 class Header {
   constructor() {
+    /*
+    DOMContentLoadedの前にインスタンス化される可能性があるので
+    ここではDOM操作をしない
+    */
   }
   init(){
     this.isLoggedIn = /ログアウト/.test(document.querySelector('#header').innerHTML);
