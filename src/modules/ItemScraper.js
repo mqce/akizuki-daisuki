@@ -4,9 +4,6 @@ class ItemScraper {
   constructor($content) {
     this.$content = $content;
   }
-  get item(){
-    return this.exec();
-  }
   exec(){
     let item = null;
     try{
@@ -16,7 +13,6 @@ class ItemScraper {
         url : this.getUrl(),
         price : this.getPrice(),
         image : this.getImage(),
-        specificId : this.getSpecificId(),// お気に入りページの削除キー、買い物かごの削除キー
       };
     }catch(e){
 
@@ -53,9 +49,6 @@ class ItemScraper {
     // メイン画像のurlからサムネ画像のurlに変換
     const url = this.$content.querySelector('#imglink')?.href;
     return url.replace(/\/goods\/\w\//, '/goods/S/');
-  }
-  getSpecificId(){
-    return '';
   }
 }
 export function itemScraper($content){
@@ -126,6 +119,11 @@ export function itemScraperListPage($content){
   お気に入りページ
 */
 class ItemScraperBookmark extends ItemScraper {
+  exec(){
+    const item = super.exec();
+    item.specificId = this.getSpecificId(); // del
+    return item;
+  }
   getName(){
     return this.$content.querySelector('.goods_name_')?.textContent;
   }
@@ -158,6 +156,7 @@ class ItemScraperCart extends ItemScraper {
   exec(){
     const item = super.exec();
     item.quantitity = this.getQuantity();
+    item.specificId = this.getSpecificId(); // del
     return item;
   }
   getName(){
