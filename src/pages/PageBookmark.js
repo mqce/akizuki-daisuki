@@ -3,24 +3,23 @@
 import config from '@/modules/Config'
 import { CartButton } from '@/modules/CartButton'
 import { BookmarkButton } from '@/modules/BookmarkButton'
-import { itemScraperListPage } from '@/modules/ItemScraper.js'
+import { itemScraperBookmark } from '@/modules/ItemScraper.js'
 import { zenToHan } from '@/modules/Util'
 
-export class PageList {
+export class PageBookmark {
   constructor() {
   }
   init(){
-    const $items = document.querySelectorAll('.thumbox');
+    const $items = document.querySelectorAll('.bookmark_');
     $items.forEach($item => {
       // 商品データをscrape
-      const item = itemScraperListPage($item);
+      const item = itemScraperBookmark($item);
   
       // 追加ボタンを描画
-      if(item){
+      if(item.name){
         if(config.items.zen_to_han){
-          $item.querySelector('.thumbox_pc .goods_name_').textContent = zenToHan(item.name);
+          $item.querySelector('.goods_name_').textContent = zenToHan(item.name);
         }
-        $item.innerHTML = $item.innerHTML.replace(/<br>.?\(税込\)/, '(税込)');
         const $parent = $item;
         this.appendBookmarkAndCartButtons($parent, item);
       }

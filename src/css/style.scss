@@ -64,6 +64,32 @@
   }
 }
 
+/* お気に入りページ */
+.bookmark_{
+  position: relative;
+
+  .action-buttons{
+    right:0;
+    top:10px;
+    gap:8px;
+  }
+  .cart-button,
+  .bookmark-button{
+    width:24px;
+    height:24px;
+  }
+
+  .comment_{
+    padding-right:80px;
+  
+    input{
+      width: 274px;
+    }
+  }
+}
+
+
+
 /* 拡大鏡 */
 .cart_table .syosai{
   position:relative;

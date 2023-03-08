@@ -11,9 +11,11 @@ class Header {
     */
   }
   init(){
-    this.isLoggedIn = /ログアウト/.test(document.querySelector('#header').innerHTML);
-
     const $header = document.querySelector('#header');
+    if(!$header) return false;
+
+    this.isLoggedIn = /ログアウト/.test($header.innerHTML);
+
     const $newHeader = document.createElement('header');
     if(config.items.slim_header){
       $newHeader.classList.add('header-slim');

@@ -121,7 +121,11 @@ export function itemScraperListPage($content){
 class ItemScraperBookmark extends ItemScraper {
   exec(){
     const item = super.exec();
-    item.specificId = this.getSpecificId(); // del
+    try{
+      item.specificId = this.getSpecificId(); // del
+    }catch(e){
+
+    }
     return item;
   }
   getName(){
@@ -155,8 +159,12 @@ export function itemScraperBookmark($content){
 class ItemScraperCart extends ItemScraper {
   exec(){
     const item = super.exec();
-    item.quantitity = this.getQuantity();
-    item.specificId = this.getSpecificId(); // del
+    try{
+      item.quantitity = this.getQuantity();
+      item.specificId = this.getSpecificId(); // del
+    }catch(e){
+
+    }
     return item;
   }
   getName(){
