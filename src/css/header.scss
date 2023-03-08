@@ -138,14 +138,15 @@
     position:absolute;
     top:-5px;
     right:-5px;
-    background:#ff6;
-    color:#333;
+    background:#f8f752;
+    color:#000;
     width:16px;
     height:16px;
     border-radius: 16px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: system-ui;
     font-size: 10px;
   }
 }
