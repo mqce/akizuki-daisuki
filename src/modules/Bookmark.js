@@ -88,7 +88,6 @@ class Bookmark {
         items.push(item);
       }
     });
-    console.log('bookmark items', items);
     return items;
   }
   async #get(params){

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "akizuki-daisuki",
-  "version": "0.2",
-  "description": "秋月電子のECサイトのUIを改善",
+  "version": "1.0.0",
+  "description": "秋月電子のサイトを使いやすくするchrome拡張",
   "content_scripts": [
     {
       "matches": ["https://akizukidenshi.com/*"],

@@ -93,7 +93,6 @@ class Cart {
         }
       }
     });
-    console.log('cart items', items);
     return items;
   }
   #getItemsDomFromHTML(html){
