@@ -3,7 +3,11 @@
 # akizuki-daisuki
 秋月電子通商(https://akizukidenshi.com/)を使いやすくするchrome拡張
 
-# Features
+
+## Install
+[chrome store](https://chrome.google.com/webstore/detail/akizuki-daisuki/hjdhpmpkbmcckegkppojhmhbgbmnlbgd?hl=ja&authuser=0)
+
+## Features
 ![feature1](images/1.png)
 ![feature2](images/2.png)
 ![feature3](images/3.png)
