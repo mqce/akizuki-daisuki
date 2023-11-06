@@ -6,7 +6,6 @@
 
 import axios from 'axios';
 import { itemScraperCart} from './ItemScraper.js'
-const sanitizer = new Sanitizer();
 const URL = '/catalog/cart/cart.aspx';
 
 class Cart {
@@ -97,7 +96,7 @@ class Cart {
   }
   #getItemsDomFromHTML(html){
     const $tmp = document.createElement('div');
-    $tmp.setHTML(html, sanitizer);
+    $tmp.innerHTML = html;
     /*
     // POST用パラメータ
     this.t2 = $tmp.querySelector('input[name="t2"]')?.value;

@@ -8,7 +8,6 @@ import { CartButton } from '@/modules/CartButton'
 import { itemScraper, itemScraperRelated } from '@/modules/ItemScraper'
 import { zenToHan } from '@/modules/Util'
 import  Loupe  from '@/modules/Loupe'
-const sanitizer = new Sanitizer();
 
 export class PageDetail {
   constructor($contents) {
@@ -117,7 +116,7 @@ export class PageDetail {
       if(response.status == 200){
         const html = response.data;
         const $tmp = document.createElement('div');
-        $tmp.setHTML(html, sanitizer);
+        $tmp.innnerHTML = html;
     
         // 「店舗情報を取得」の下に在庫表を表示 
         const $table = $tmp.querySelector('#detail_stockinfo table');

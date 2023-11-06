@@ -9,7 +9,6 @@
 
 import axios from 'axios';
 import { itemScraperBookmark } from './ItemScraper.js'
-const sanitizer = new Sanitizer();
 const URL_BOOKMARK = '/catalog/customer/bookmark.aspx';
 
 class Bookmark {
@@ -80,7 +79,7 @@ class Bookmark {
   #parse(html){
     let items = [];
     const $tmp = document.createElement('div');
-    $tmp.setHTML(html, sanitizer);
+    $tmp.innerHTML = html;
     const $items = $tmp.querySelectorAll('.bookmark_');
     $items.forEach($item => {
       const item = itemScraperBookmark($item);

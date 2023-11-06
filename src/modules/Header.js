@@ -1,7 +1,6 @@
 "use strict";
 
 import config from '../modules/Config'
-const sanitizer = new Sanitizer();
 
 class Header {
   constructor() {
@@ -19,10 +18,10 @@ class Header {
     const $newHeader = document.createElement('header');
     if(config.items.slim_header){
       $newHeader.classList.add('header-slim');
-      $newHeader.setHTML(this.slimHtml, sanitizer);
+      $newHeader.innerHTML = this.slimHtml;
     }else{
       $newHeader.classList.add('header');
-      $newHeader.setHTML(this.html, sanitizer);
+      $newHeader.innerHTML = this.html;
     }
     $header.replaceWith($newHeader);
     this.$elem = $newHeader;
