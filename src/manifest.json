@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "akizuki-daisuki",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "秋月電子のサイトを使いやすくするchrome拡張",
   "content_scripts": [
     {

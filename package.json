@@ -1,6 +1,6 @@
 {
   "name": "akizuki-daisuki",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Chrome Extension for akizukidenshi.com.com",
   "main": "src/content.js",
   "devDependencies": {
