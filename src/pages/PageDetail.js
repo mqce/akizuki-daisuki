@@ -113,14 +113,17 @@ export class PageDetail {
           goods: id
         }
       });
+
       if(response.status == 200){
         const html = response.data;
-        const $tmp = document.createElement('div');
-        $tmp.innnerHTML = html;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
     
         // 「店舗情報を取得」の下に在庫表を表示 
-        const $table = $tmp.querySelector('#detail_stockinfo table');
-        document.querySelector('.detail_stocktitle_').append($table);
+        const $table = doc.querySelector('#detail_stockinfo table');
+        if($table){
+          document.querySelector('.detail_stocktitle_').append($table);
+        }
       }
     }catch(e){
       console.error(e);
